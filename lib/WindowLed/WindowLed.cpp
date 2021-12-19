@@ -564,39 +564,50 @@ void WindowLed::showCurrentSequence(unsigned long now) {
 
 void WindowLed::update(unsigned long now) {
   static bool firstStart = true;
-  switch (effectList[currentEffect].funcNumber) {
-    case WINDOWLED_INIT:
-      firstStart = !this->effectInit(firstStart);
-      break;
-    case WINDOWLED_RAINBOW:
-      firstStart = !this->effectRainbow(firstStart);
-      break;
-    case WINDOWLED_FILL:
-      firstStart = !this->effectFill(firstStart);
-      break;
-    case WINDOWLED_TOWARDS:
-      firstStart = !this->effectTowards(firstStart);
-      break;
-    case WINDOWLED_SQARESNAKE:
-      firstStart = !this->effectSquareSnake(firstStart);
-      break;
-    case WINDOWLED_FADE:
-      firstStart = !this->effectFade(firstStart);
-      break;
-    case WINDOWLED_DROP:
-      firstStart = !this->effectDrop(firstStart);
-      break;
-  }
-  FastLED.show(100);
-  Serial.print(".");
-  if (firstStart) {
-    if (--currentTime <= 0) {
-      currentEffect++;
-      if (currentEffect >= this->effectCount) {
-        currentEffect = 1;
-      }
-      currentTime = getEffectTimes(currentEffect);
+  if (this->isOn) {
+    switch (effectList[currentEffect].funcNumber) {
+      case WINDOWLED_INIT:
+        firstStart = !this->effectInit(firstStart);
+        break;
+      case WINDOWLED_RAINBOW:
+        firstStart = !this->effectRainbow(firstStart);
+        break;
+      case WINDOWLED_FILL:
+        firstStart = !this->effectFill(firstStart);
+        break;
+      case WINDOWLED_TOWARDS:
+        firstStart = !this->effectTowards(firstStart);
+        break;
+      case WINDOWLED_SQARESNAKE:
+        firstStart = !this->effectSquareSnake(firstStart);
+        break;
+      case WINDOWLED_FADE:
+        firstStart = !this->effectFade(firstStart);
+        break;
+      case WINDOWLED_DROP:
+        firstStart = !this->effectDrop(firstStart);
+        break;
     }
-    showCurrentSequence(now);
+    FastLED.show(100);
+    Serial.print(".");
+    if (firstStart) {
+      if (--currentTime <= 0) {
+        currentEffect++;
+        if (currentEffect >= this->effectCount) {
+          currentEffect = 1;
+        }
+        currentTime = getEffectTimes(currentEffect);
+      }
+      showCurrentSequence(now);
+    }
   }
+}
+
+void WindowLed::on() {
+  this->isOn = true;
+}
+
+void WindowLed::off() {
+  this->isOn = false;
+  FastLED.show(0);
 }
