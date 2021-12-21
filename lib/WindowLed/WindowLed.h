@@ -1,6 +1,7 @@
 #ifndef WINDOW_LED
 #define WINDOW_LED
 #include <Arduino.h>
+#define FASTLED_ALLOW_INTERRUPTS 0
 #include <FastLED.h>
 
 #define START_AT_TOPLEFT 0
@@ -63,6 +64,7 @@ class WindowLed {
     uint8_t height;
     uint8_t startPoint;
     uint8_t linesDirection;
+    uint8_t controlPin;
     SKIP_INFO* skip;
     uint8_t skipCount;
     effectInfo* effectList;
@@ -86,6 +88,7 @@ class WindowLed {
 
     void on();
     void off();
+    bool getState();
 };
 
 #endif

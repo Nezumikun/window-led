@@ -1,6 +1,6 @@
 #include "WindowLed.h"
 
-WindowLed::WindowLed(uint8_t LedsNumber, unsigned char controlPin, SKIP_INFO* skip, uint8_t skipCount, uint8_t width, uint8_t height, uint8_t startPoint, uint8_t linesDirection) {
+WindowLed::WindowLed(uint8_t LedsNumber, uint8_t controlPin, SKIP_INFO* skip, uint8_t skipCount, uint8_t width, uint8_t height, uint8_t startPoint, uint8_t linesDirection) {
   this->LedsNumber = LedsNumber;
   this->skip = skip;
   this->skipCount = skipCount;
@@ -10,6 +10,7 @@ WindowLed::WindowLed(uint8_t LedsNumber, unsigned char controlPin, SKIP_INFO* sk
   this->linesDirection = linesDirection;
   this->isOn = true;
   this->leds = (CRGB *) malloc(LedsNumber * sizeof(CRGB));
+  this->controlPin = controlPin;
   this->ledsHue = (uint8_t *) malloc(LedsNumber * sizeof(uint8_t));
   effectInfo list[] = {
     { WINDOWLED_INIT, 1 },
@@ -24,7 +25,7 @@ WindowLed::WindowLed(uint8_t LedsNumber, unsigned char controlPin, SKIP_INFO* sk
   this->effectCount = sizeof(list)/sizeof(effectInfo);
   this->effectList = (effectInfo *) malloc(this->effectCount * sizeof(effectInfo));
   memcpy(this->effectList, list, this->effectCount * sizeof(effectInfo));
-  FastLED.addLeds<WS2812B, 3, GRB>(leds, LedsNumber);  // GRB ordering is typical
+  FastLED.addLeds<WS2812B, D5, GRB>(leds, (int)LedsNumber);  // GRB ordering is typical
 }
 
 void WindowLed::begin() {
@@ -610,4 +611,8 @@ void WindowLed::on() {
 void WindowLed::off() {
   this->isOn = false;
   FastLED.show(0);
+}
+
+bool WindowLed::getState() {
+  return this->isOn;
 }
