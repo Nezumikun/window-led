@@ -32,12 +32,12 @@ const uint8_t width = 10;
 const uint8_t height = 14;
 const uint8_t startPoint = START_AT_BOTTOMLEFT;
 const uint8_t linesDirection = LINES_VERTICAL;
-SKIP_INFO skip[3] = {{ 0, 5 } , { 5 + 14, 3 }, { 5 + 14 + 3 + 14 * 2, 2 }};
+WL::SKIP_INFO skip[3] = {{ 0, 5 } , { 5 + 14, 3 }, { 5 + 14 + 3 + 14 * 2, 2 }};
 #endif
 
 #define DELAY 50
 
-WindowLed WL(NUM_LEDS, 3, skip, 3, width, height, startPoint, linesDirection);
+WL::WindowLed wl(NUM_LEDS, 3, skip, 3, width, height, startPoint, linesDirection);
 CRGB leds[NUM_LEDS];
 uint8_t ledsHue[NUM_LEDS];
 uint8_t hue = 0;
@@ -61,7 +61,7 @@ String mqtt_topicSet;
 String mqtt_topicState;
 
 void mqtt_publish_state() {
-  mqtt.publish(mqtt_topicState.c_str(), WL.getState() ? "ON" : "OFF");
+  mqtt.publish(mqtt_topicState.c_str(), wl.getState() ? "ON" : "OFF");
 }
 
 void mqtt_callback(char* topic, byte* payload, unsigned int length) {
@@ -74,11 +74,11 @@ void mqtt_callback(char* topic, byte* payload, unsigned int length) {
   Serial.println();
 
   if ((length == 3) && (memcmp(payload, "OFF", 3) == 0)) {
-    WL.off();
+    wl.off();
     mqtt_publish_state();
   }
   else if ((length == 2) && (memcmp(payload, "ON", 2) == 0)) {
-    WL.on();
+    wl.on();
     mqtt_publish_state();
   }
 
@@ -97,7 +97,7 @@ void setup() {
   prev = millis();
   Serial.begin(115200);
   Serial.println("Intialized");
-  WL.begin();
+  wl.begin();
   mqtt.setServer(mqtt_server, 1883);
   mqtt.setCallback(mqtt_callback);
 }
@@ -175,7 +175,7 @@ void loop() {
   unsigned long now = millis();
   if (now - prev >= DELAY) {
     prev = now;
-    WL.update(now);
+    wl.update(now);
     if (check_wifi()) {
       check_mqtt();
       if (mqtt.connected()) {
