@@ -1,0 +1,33 @@
+{
+  "name": "Window.Led",
+  "icon": "mdi:switch",
+  "uniq_id": "led_0x2c3ae8439851",
+  "device": {
+    "identifiers": [
+      "led_0x2c3ae8439851"
+    ],
+    "name": "Window.Led",
+    "model": "ESP8266",
+    "manufacturer": "Espressif"
+  },
+  "command_topic": "homeassistant/switch/window_led/0x2c3ae8439851/set",
+  "state_topic": "homeassistant/switch/window_led/0x2c3ae8439851/state",
+  "availability_topic": "homeassistant/switch/window_led/0x2c3ae8439851/status"
+}
+
+{
+  "name": "r4s1.Kettle.boil",
+  "icon": "mdi:kettle",
+  "uniq_id": "boil_c3d8f40267ab",
+  "device": {
+    "identifiers": [
+      "Kettle_c3d8f40267ab"
+    ],
+    "name": "r4s1.Kettle",
+    "model": "RK-G240S",
+    "manufacturer": "Redmond"
+  },
+  "command_topic": "r4s/c3d8f40267ab/cmd/boil",
+  "state_topic": "r4s/c3d8f40267ab/rsp/boil",
+  "availability_topic": "r4s/c3d8f40267ab/status"
+}
