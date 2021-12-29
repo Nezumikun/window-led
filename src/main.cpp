@@ -32,12 +32,12 @@ const uint8_t width = 10;
 const uint8_t height = 14;
 const uint8_t startPoint = START_AT_BOTTOMLEFT;
 const uint8_t linesDirection = LINES_VERTICAL;
-WL::SKIP_INFO skip[3] = {{ 0, 5 } , { 5 + 14, 3 }, { 5 + 14 + 3 + 14 * 2, 2 }};
+Nezumikun::WL::SKIP_INFO skip[3] = {{ 0, 5 } , { 5 + 14, 3 }, { 5 + 14 + 3 + 14 * 2, 2 }};
 #endif
 
 #define DELAY 50
 
-WL::WindowLed wl(NUM_LEDS, 3, skip, 3, width, height, startPoint, linesDirection);
+Nezumikun::WL::WindowLed wl(NUM_LEDS, 3, skip, 3, width, height, startPoint, linesDirection);
 CRGB leds[NUM_LEDS];
 uint8_t ledsHue[NUM_LEDS];
 uint8_t hue = 0;
