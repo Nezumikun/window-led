@@ -17,6 +17,14 @@ namespace Nezumikun {
       return this->height;
     };
 
+    uint8_t Canvas::getBrightness() {
+      return this->brightness;
+    };
+
+    void Canvas::setBrightness(uint8_t brightness) {
+      this->brightness = brightness;
+    };
+
     CRGB * Canvas::getLeds() {
       return this->leds;
     };

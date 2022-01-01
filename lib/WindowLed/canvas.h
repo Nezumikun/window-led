@@ -12,10 +12,13 @@ namespace Nezumikun {
         uint8_t width;
         uint8_t height;
         CRGB * leds;
+        uint8_t brightness = 100;
       public:
         Canvas(uint8_t width, uint8_t height);
         uint8_t getWidth();
         uint8_t getHeight();
+        uint8_t getBrightness();
+        void setBrightness(uint8_t brightness);
         CRGB * getLeds();
     };
 

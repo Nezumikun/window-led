@@ -1,7 +1,7 @@
 #ifndef WINDOW_LED
 #define WINDOW_LED
 #include <Arduino.h>
-#define FASTLED_ALLOW_INTERRUPTS 0
+#define FASTLED_INTERRUPT_RETRY_COUNT 1
 #include <FastLED.h>
 
 #define START_AT_TOPLEFT 0

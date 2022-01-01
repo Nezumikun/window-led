@@ -1,6 +1,8 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
+#include "canvas.h"
+#include "effects.h"
 #include "WindowLed.h"
 
 //#define TEST
@@ -35,14 +37,19 @@ const uint8_t linesDirection = LINES_VERTICAL;
 Nezumikun::WL::SKIP_INFO skip[3] = {{ 0, 5 } , { 5 + 14, 3 }, { 5 + 14 + 3 + 14 * 2, 2 }};
 #endif
 
-#define DELAY 50
+#define DELAY 40
+#define WIFI_CHECK_PERIOD 500
+
+Nezumikun::WindowLed::Canvas canvas(width, height);
+Nezumikun::WindowLed::Effect* effect;
 
 Nezumikun::WL::WindowLed wl(NUM_LEDS, 3, skip, 3, width, height, startPoint, linesDirection);
 CRGB leds[NUM_LEDS];
 uint8_t ledsHue[NUM_LEDS];
 uint8_t hue = 0;
 
-unsigned long prev = 0;
+unsigned long prevLeds = 0;
+unsigned long prevWifi = 0;
 
 const char * WiFi_SSID = "XiaomiDev";
 const char * WiFi_PASS = "XiaoMiDev";
@@ -81,25 +88,22 @@ void mqtt_callback(char* topic, byte* payload, unsigned int length) {
     wl.on();
     mqtt_publish_state();
   }
-
-  // Switch on the LED if an 1 was received as first character
-  // if ((char)payload[0] == '1') {
-  //   digitalWrite(BUILTIN_LED, LOW);   // Turn the LED on (Note that LOW is the voltage level
-  //   // but actually the LED is on; this is because
-  //   // it is active low on the ESP-01)
-  // } else {
-  //   digitalWrite(BUILTIN_LED, HIGH);  // Turn the LED off by making the voltage HIGH
-  // }
-
 }
 
 void setup() {
-  prev = millis();
+  prevLeds = millis();
   Serial.begin(115200);
+  delay(1000);
   Serial.println("Intialized");
   wl.begin();
   mqtt.setServer(mqtt_server, 1883);
   mqtt.setCallback(mqtt_callback);
+  effect = new Nezumikun::WindowLed::EffectRise(canvas, 25);
+  do {
+    effect->loop();
+    delay(1);
+  } while (!effect->endOfEffect());
+
 }
 
 bool check_wifi() {
@@ -172,10 +176,15 @@ void check_mqtt() {
 }
 
 void loop() {
+  delay(1);
+  return;
   unsigned long now = millis();
-  if (now - prev >= DELAY) {
-    prev = now;
+  if (now - prevLeds >= DELAY) {
+    prevLeds = now;
     wl.update(now);
+  }
+  if (now - prevWifi >= WIFI_CHECK_PERIOD) {
+    prevWifi = now;
     if (check_wifi()) {
       check_mqtt();
       if (mqtt.connected()) {
