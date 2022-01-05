@@ -11,6 +11,7 @@ namespace Nezumikun {
       private:
         uint8_t width;
         uint8_t height;
+        uint16_t ledsNumber;
         CRGB * leds;
         uint8_t brightness = 100;
       public:
@@ -20,6 +21,7 @@ namespace Nezumikun {
         uint8_t getBrightness();
         void setBrightness(uint8_t brightness);
         CRGB * getLeds();
+        void fill(const struct CRGB & color);
     };
 
   }

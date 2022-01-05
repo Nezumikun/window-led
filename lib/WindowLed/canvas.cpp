@@ -6,6 +6,7 @@ namespace Nezumikun {
     Canvas::Canvas(uint8_t width, uint8_t height) {
       this->width = width;
       this->height = height;
+      this->ledsNumber = (uint16_t)width * height;
       this->leds = (CRGB *) malloc((width * height) * sizeof(CRGB));
     }
 
@@ -28,6 +29,10 @@ namespace Nezumikun {
     CRGB * Canvas::getLeds() {
       return this->leds;
     };
+
+    void Canvas::fill(const struct CRGB & color) {
+      fill_solid(this->leds, this->ledsNumber, color);
+    }
 
   }
 }

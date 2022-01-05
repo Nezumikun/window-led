@@ -1,9 +1,9 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
-#include "canvas.h"
-#include "effects.h"
-#include "WindowLed.h"
+#define FASTLED_ALLOW_INTERRUPTS 0
+#define FASTLED_INTERRUPT_RETRY_COUNT 1
+#include "lights.h"
 
 //#define TEST
 
@@ -32,21 +32,17 @@ const effectInfo effectList[] = {
 #define TEST_TIME 1000
 const uint8_t width = 10;
 const uint8_t height = 14;
-const uint8_t startPoint = START_AT_BOTTOMLEFT;
-const uint8_t linesDirection = LINES_VERTICAL;
-Nezumikun::WL::SKIP_INFO skip[3] = {{ 0, 5 } , { 5 + 14, 3 }, { 5 + 14 + 3 + 14 * 2, 2 }};
+//const uint8_t startPoint = START_AT_BOTTOMLEFT;
+//const uint8_t linesDirection = LINES_VERTICAL;
+// Nezumikun::WL::SKIP_INFO skip[3] = {{ 0, 5 } , { 5 + 14, 3 }, { 5 + 14 + 3 + 14 * 2, 2 }};
+Nezumikun::WindowLed::SkipInfo _skip[3] = {{ 0, 5 } , { 5 + 14, 3 }, { 5 + 14 + 3 + 14 * 2, 2 }};
 #endif
 
 #define DELAY 40
 #define WIFI_CHECK_PERIOD 500
 
-Nezumikun::WindowLed::Canvas canvas(width, height);
-Nezumikun::WindowLed::Effect* effect;
-
-Nezumikun::WL::WindowLed wl(NUM_LEDS, 3, skip, 3, width, height, startPoint, linesDirection);
 CRGB leds[NUM_LEDS];
-uint8_t ledsHue[NUM_LEDS];
-uint8_t hue = 0;
+Nezumikun::WindowLed::Lights lights(&leds[0], NUM_LEDS, width, height);
 
 unsigned long prevLeds = 0;
 unsigned long prevWifi = 0;
@@ -68,49 +64,47 @@ String mqtt_topicSet;
 String mqtt_topicState;
 
 void mqtt_publish_state() {
-  mqtt.publish(mqtt_topicState.c_str(), wl.getState() ? "ON" : "OFF");
+  mqtt.publish(mqtt_topicState.c_str(), lights.isOn() ? "ON" : "OFF");
 }
 
 void mqtt_callback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Message arrived [");
   Serial.print(topic);
   Serial.print("] ");
-  for (int i = 0; i < length; i++) {
+  for (unsigned int i = 0; i < length; i++) {
     Serial.print((char)payload[i]);
   }
   Serial.println();
 
   if ((length == 3) && (memcmp(payload, "OFF", 3) == 0)) {
-    wl.off();
+    lights.off();
     mqtt_publish_state();
   }
   else if ((length == 2) && (memcmp(payload, "ON", 2) == 0)) {
-    wl.on();
+    lights.on();
     mqtt_publish_state();
   }
 }
 
 void setup() {
-  prevLeds = millis();
+  prevLeds = 500;
+  pinMode(D5, OUTPUT);
+  digitalWrite(D5, LOW);
   Serial.begin(115200);
-  delay(1000);
+  delay(500);
   Serial.println("Intialized");
-  wl.begin();
+  FastLED.addLeds<WS2812B, D2, GRB>(leds, NUM_LEDS);
+  //Nezumikun::WindowLed::Settings::debugLevel = Nezumikun::WindowLed::DebugLevel::Debug;
+  lights.setSkipInfo(_skip, 3);
   mqtt.setServer(mqtt_server, 1883);
   mqtt.setCallback(mqtt_callback);
-  effect = new Nezumikun::WindowLed::EffectRise(canvas, 25);
-  do {
-    effect->loop();
-    delay(1);
-  } while (!effect->endOfEffect());
-
 }
 
 bool check_wifi() {
   uint8_t wifi_status = WiFi.status();
   static bool wifi_connecting = false;
   if ((wifi_status != WL_CONNECTED) && !wifi_connecting) {
-    Serial.println();
+    digitalWrite(D5, LOW);
     Serial.print("Connecting to ");
     Serial.print(WiFi_SSID);
     Serial.println("...");
@@ -119,6 +113,7 @@ bool check_wifi() {
   } else if (wifi_connecting && (wifi_status != 7)) {
     wifi_connecting = false;
     if (wifi_status == WL_CONNECTED) {
+      digitalWrite(D5, HIGH);
       Serial.println();
       Serial.print("WiFi connected to ");
       Serial.print(WiFi_SSID);
@@ -130,6 +125,8 @@ bool check_wifi() {
         deviceId += String(mac[i], HEX);
       }
       Serial.println(String("DeviceID = ") + deviceId);
+    } else {
+      Serial.println(String("Status = ") + wifi_status);
     }
   }
   return wifi_status == WL_CONNECTED;
@@ -176,12 +173,10 @@ void check_mqtt() {
 }
 
 void loop() {
-  delay(1);
-  return;
   unsigned long now = millis();
   if (now - prevLeds >= DELAY) {
-    prevLeds = now;
-    wl.update(now);
+    prevLeds = prevLeds + DELAY;
+    lights.loop();
   }
   if (now - prevWifi >= WIFI_CHECK_PERIOD) {
     prevWifi = now;

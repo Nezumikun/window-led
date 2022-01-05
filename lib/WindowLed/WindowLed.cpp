@@ -28,7 +28,7 @@ namespace Nezumikun {
       this->effectCount = sizeof(list)/sizeof(effectInfo);
       this->effectList = (effectInfo *) malloc(this->effectCount * sizeof(effectInfo));
       memcpy(this->effectList, list, this->effectCount * sizeof(effectInfo));
-      FastLED.addLeds<WS2812B, D5, GRB>(leds, (int)LedsNumber);  // GRB ordering is typical
+      FastLED.addLeds<WS2812B, 2, GRB>(leds, (int)LedsNumber);  // GRB ordering is typical
     }
 
     void WindowLed::begin() {
