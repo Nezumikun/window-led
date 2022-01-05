@@ -1,5 +1,5 @@
 #include "effect.h"
-
+#include "../settings.h"
 namespace Nezumikun {
   namespace WindowLed {
 
@@ -11,8 +11,20 @@ namespace Nezumikun {
     Effect::~Effect() {
     };
 
+    void Effect::setup() {
+      if (Settings::debugLevel >= DebugLevel::Debug) {
+        Serial.print("Effect.setup");
+      }
+    };
+
     bool Effect::endOfEffect() {
       return this->_endOfEffect;
+    };
+
+    void Effect::effectFinished() {
+      this->_endOfEffect = true;
+      this->firstCall = true;
+      this->setup();
     };
 
   }

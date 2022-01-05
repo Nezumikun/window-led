@@ -13,11 +13,12 @@ namespace Nezumikun {
         bool _endOfEffect = false;
         bool firstCall = true;
         uint8_t framePerSecond;
-        void effectFinished();
+        virtual void effectFinished();
       public:
         Effect(Canvas & canvas, uint8_t framePerSecond);
         virtual ~Effect();
         bool endOfEffect();
+        virtual void setup();
         virtual void loop() = 0;
     };
 

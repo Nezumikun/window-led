@@ -18,6 +18,10 @@ namespace Nezumikun {
       return this->height;
     };
 
+    uint16_t Canvas::getLedsNumber() {
+      return this->ledsNumber;
+    };
+
     uint8_t Canvas::getBrightness() {
       return this->brightness;
     };
@@ -32,6 +36,10 @@ namespace Nezumikun {
 
     void Canvas::fill(const struct CRGB & color) {
       fill_solid(this->leds, this->ledsNumber, color);
+    }
+
+    uint16_t Canvas::XY(uint8_t x, uint8_t y) {
+      return (uint16_t)y * this->width + x;
     }
 
   }

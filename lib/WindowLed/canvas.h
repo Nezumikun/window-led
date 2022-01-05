@@ -1,4 +1,3 @@
-#include <Arduino.h>
 #include <FastLED.h>
 
 #ifndef WINDOWLED_CANVAS
@@ -19,8 +18,10 @@ namespace Nezumikun {
         uint8_t getWidth();
         uint8_t getHeight();
         uint8_t getBrightness();
+        uint16_t getLedsNumber();
         void setBrightness(uint8_t brightness);
         CRGB * getLeds();
+        uint16_t XY(uint8_t x, uint8_t y);
         void fill(const struct CRGB & color);
     };
 

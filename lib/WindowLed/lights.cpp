@@ -90,8 +90,8 @@ namespace Nezumikun {
       if (this->mode == Mode::Init) {
         this->effectInit->loop();
         if (this->effectInit->endOfEffect()) {
-          delete this->effectInit;
-          this->mode = Mode::Mode1;
+          //delete this->effectInit;
+          //this->mode = Mode::Mode1;
         }
       }
     }
