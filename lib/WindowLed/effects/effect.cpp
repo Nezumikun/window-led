@@ -11,11 +11,13 @@ namespace Nezumikun {
     Effect::~Effect() {
     };
 
-    void Effect::setup() {
+    void Effect::reset() {
+      this->firstCall = false;
+      this->_endOfEffect = false;
       if (Settings::debugLevel >= DebugLevel::Debug) {
-        Serial.print("Effect.setup");
+        Serial.print("Effect.reset");
       }
-    };
+    }
 
     bool Effect::endOfEffect() {
       return this->_endOfEffect;
@@ -24,8 +26,14 @@ namespace Nezumikun {
     void Effect::effectFinished() {
       this->_endOfEffect = true;
       this->firstCall = true;
-      this->setup();
+      this->reset();
     };
+
+    void Effect::loop() {
+      if (this->firstCall) {
+        this->reset();
+      }
+    }
 
   }
 }

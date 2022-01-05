@@ -5,11 +5,7 @@ namespace Nezumikun {
   namespace WindowLed {
 
     void EffectRise::loop() {
-      if (this->firstCall) {
-        this->frame = 0;
-        this->firstCall = false;
-        this->_endOfEffect = false;
-      }
+      EffectWithTime::loop();
       uint16_t currentTime = (uint16_t)this->frame * 1000 / this->framePerSecond;
       uint8_t angle = (uint8_t)(128 * currentTime / this->timeInMilliseconds) - 64;
       //uint8_t brightness = ((uint16_t)sin8(angle) * 100 / 255);

@@ -26,7 +26,7 @@ namespace Nezumikun {
       public:
         EffectInit(Canvas & canvas, uint8_t framePerSecond, uint16_t timeInMilliseconds = 1000);
         ~EffectInit();
-        virtual void setup();
+        virtual void reset();
         virtual void loop();
     };
 

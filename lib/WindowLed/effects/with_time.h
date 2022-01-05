@@ -12,7 +12,8 @@ namespace Nezumikun {
         uint16_t timeInMilliseconds;
       public:
         EffectWithTime(Canvas & canvas, uint8_t framePerSecond, uint16_t timeInMilliseconds = 1000);
-        virtual void loop() = 0;
+        virtual void reset();
+        virtual void loop();
     };
 
   }

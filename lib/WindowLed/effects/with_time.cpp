@@ -7,5 +7,14 @@ namespace Nezumikun {
       this->timeInMilliseconds = timeInMilliseconds;
     };
 
+    void EffectWithTime::reset() {
+      this->frame = 0;
+      Effect::reset();
+    }
+
+    void EffectWithTime::loop() {
+      Effect::loop();
+    }
+
   }
 }

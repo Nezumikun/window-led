@@ -18,7 +18,7 @@ namespace Nezumikun {
         Effect(Canvas & canvas, uint8_t framePerSecond);
         virtual ~Effect();
         bool endOfEffect();
-        virtual void setup();
+        virtual void reset();
         virtual void loop() = 0;
     };
 
