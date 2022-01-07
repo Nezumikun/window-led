@@ -38,11 +38,12 @@ const uint8_t height = 14;
 Nezumikun::WindowLed::SkipInfo _skip[3] = {{ 0, 5 } , { 5 + 14, 3 }, { 5 + 14 + 3 + 14 * 2, 2 }};
 #endif
 
-#define DELAY 40
+#define FRAME_PER_SECOND 50
+#define DELAY 1000 / FRAME_PER_SECOND
 #define WIFI_CHECK_PERIOD 500
 
 CRGB leds[NUM_LEDS];
-Nezumikun::WindowLed::Lights lights(&leds[0], NUM_LEDS, width, height);
+Nezumikun::WindowLed::Lights lights(&leds[0], NUM_LEDS, width, height, FRAME_PER_SECOND);
 
 unsigned long prevLeds = 0;
 unsigned long prevWifi = 0;
@@ -62,6 +63,8 @@ String deviceId;
 String mqtt_topicConfig;
 String mqtt_topicSet;
 String mqtt_topicState;
+
+#define LIGHT_PIN 
 
 void mqtt_publish_state() {
   mqtt.publish(mqtt_topicState.c_str(), lights.isOn() ? "ON" : "OFF");

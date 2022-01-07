@@ -15,7 +15,7 @@ namespace Nezumikun {
       this->firstCall = false;
       this->_endOfEffect = false;
       if (Settings::debugLevel >= DebugLevel::Debug) {
-        Serial.print("Effect.reset");
+        Serial.println("Effect.reset");
       }
     }
 
@@ -24,9 +24,9 @@ namespace Nezumikun {
     };
 
     void Effect::effectFinished() {
+      this->reset();
       this->_endOfEffect = true;
       this->firstCall = true;
-      this->reset();
     };
 
     void Effect::loop() {

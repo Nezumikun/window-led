@@ -3,19 +3,22 @@
 namespace Nezumikun {
   namespace WindowLed {
 
-    Lights::Lights(CRGB * leds, uint16_t ledsNumber, uint8_t width, uint8_t height) {
+    Lights::Lights(CRGB * leds, uint16_t ledsNumber, uint8_t width, uint8_t height, uint8_t framePerSecond) {
       this->leds = leds;
       this->ledsNumber = ledsNumber;
+      this->framePerSecond = framePerSecond;
       this->canvas = new Canvas(width, height);
       this->effectInit = new EffectInit(*canvas, framePerSecond, timeInMilliseconds);
       this->effectRise = new EffectRise(*canvas, framePerSecond, timeInMilliseconds);
       this->effectFade = new EffectFade(*canvas, framePerSecond, timeInMilliseconds);
+      this->effectFill = new EffectFill(*canvas, framePerSecond);
       this->mode = Mode::Init;
       this->startAt = StartAt::BottomLeft;
       this->linesDirection = LinesDirection::Vertical;
       for (uint16_t i = 0; i < ledsNumber; i++) {
         leds[i] = CRGB::Black;
       }
+      this->state = State::On;
     }
 
     void Lights::setSkipInfo(SkipInfo * skip, uint8_t count) {
@@ -87,18 +90,43 @@ namespace Nezumikun {
         this->firstCall = false;
         this->mode = Mode::Init;
       }
-      if (this->mode == Mode::Init) {
-        this->effectInit->loop();
-        if (this->effectInit->endOfEffect()) {
-          //delete this->effectInit;
-          //this->mode = Mode::Mode1;
-        }
+      switch (this->mode) {
+        case Mode::Init:
+          this->effectInit->loop();
+          if (this->effectInit->endOfEffect()) {
+            delete this->effectInit;
+            this->mode = Mode::Mode1;
+          }
+          break;
+        case Mode::Mode1:
+          this->effectFill->loop();
+          if (this->effectInit->endOfEffect()) {
+            //delete this->effectInit;
+            //this->mode = Mode::Mode1;
+          }
+          break;
+        case Mode::Off:
+          this->effectFade->loop();
+          if (this->effectFade->endOfEffect()) {
+            this->mode = Mode::Wait;
+            this->canvas->setBrightness(0);
+          }
+          break;
+        case Mode::On:
+          this->effectRise->loop();
+          if (this->effectRise->endOfEffect()) {
+            this->mode = this->saveMode;
+            this->canvas->setBrightness(255);
+          }
+          break;
       }
     }
 
     void Lights::on() {
       if (this->state == State::Off) {
         this->mode = Mode::On;
+        this->state = State::On;
+        this->effectRise->reset();
       }
     }
 
@@ -106,6 +134,8 @@ namespace Nezumikun {
       if (this->state == State::On) {
         this->saveMode = this->mode;
         this->mode = Mode::Off;
+        this->state = State::Off;
+        this->effectFade->reset();
       }
     }
 

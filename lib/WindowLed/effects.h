@@ -4,5 +4,6 @@
 #include "canvas.h"
 #include "settings.h"
 #include "effects/init.h"
+#include "effects/fill.h"
 
 #endif
