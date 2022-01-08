@@ -24,7 +24,6 @@ namespace Nezumikun {
     };
 
     void Effect::effectFinished() {
-      this->reset();
       this->_endOfEffect = true;
       this->firstCall = true;
     };

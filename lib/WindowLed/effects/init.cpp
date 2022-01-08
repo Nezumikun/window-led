@@ -89,10 +89,20 @@ namespace Nezumikun {
       } else if (this->subMode == SubMode::Fade) {
         this->effectFade->loop();
         if (this->effectFade->endOfEffect()) {
+          if (Settings::debugLevel >= DebugLevel::Debug) {
+            Serial.print("EffectInit.loop :: ");
+            Serial.print((this->mode == Mode::Red) ? "Red"
+              : (this->mode == Mode::Green) ? "Green"
+              : (this->mode == Mode::Blue) ? "Blue"
+              : (this->mode == Mode::White) ? "White"
+              : "Black"
+            );
+            Serial.println(" fade end");
+          }
           this->mode = (this->mode == Mode::Red) ? Mode::Green
             : (this->mode == Mode::Green) ? Mode::Blue
             : (this->mode == Mode::Blue) ? Mode::White
-            : Mode::Random
+            : Mode::End
           ;
           this->subMode = SubMode::Draw;
         }

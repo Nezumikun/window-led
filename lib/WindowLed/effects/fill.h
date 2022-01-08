@@ -8,12 +8,21 @@ namespace Nezumikun {
   namespace WindowLed {
 
     class EffectFill : public Effect {
+      public:
+        enum class FillStyle {
+          NewLine,
+          Continue,
+          RandomStyle
+        };
       private:
+        void newLine();
       protected:
         Effect::Direction direction = Effect::Direction::Random;
         Effect::Direction currentDirection;
         Effect::FillColorStyle fillColorStyle = Effect::FillColorStyle::RandomStyle;
         Effect::FillColorStyle currentFillColorStyle;
+        FillStyle fillStyle = FillStyle::RandomStyle;
+        FillStyle currentFillStyle;
         EffectFade * effectFade;
         uint8_t x;
         uint8_t y;
