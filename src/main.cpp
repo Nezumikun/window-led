@@ -4,6 +4,7 @@
 #define FASTLED_ALLOW_INTERRUPTS 0
 #define FASTLED_INTERRUPT_RETRY_COUNT 1
 #include "lights.h"
+#include "uptime.h"
 
 //#define TEST
 
@@ -44,9 +45,11 @@ Nezumikun::WindowLed::SkipInfo _skip[3] = {{ 0, 5 } , { 5 + 14, 3 }, { 5 + 14 + 
 
 CRGB leds[NUM_LEDS];
 Nezumikun::WindowLed::Lights lights(&leds[0], NUM_LEDS, width, height, FRAME_PER_SECOND);
+Nezumikun::Uptime uptime;
 
 unsigned long prevLeds = 0;
 unsigned long prevWifi = 0;
+unsigned char prevMinutes = -1;
 
 const char * WiFi_SSID = "XiaomiDev";
 const char * WiFi_PASS = "XiaoMiDev";
@@ -63,11 +66,18 @@ String deviceId;
 String mqtt_topicConfig;
 String mqtt_topicSet;
 String mqtt_topicState;
+String mqtt_topicUptime;
 
-#define LIGHT_PIN 
+#define LIGHT_PIN D1
 
 void mqtt_publish_state() {
   mqtt.publish(mqtt_topicState.c_str(), lights.isOn() ? "ON" : "OFF");
+}
+
+void mqtt_publish_uptime() {
+  String strUptime = uptime.toString();
+  Serial.println(String("Uptime: ") + strUptime);
+  mqtt.publish(mqtt_topicUptime.c_str(), strUptime.c_str());
 }
 
 void mqtt_callback(char* topic, byte* payload, unsigned int length) {
@@ -82,17 +92,19 @@ void mqtt_callback(char* topic, byte* payload, unsigned int length) {
   if ((length == 3) && (memcmp(payload, "OFF", 3) == 0)) {
     lights.off();
     mqtt_publish_state();
+    Serial.println(F("Lights OFF"));
   }
   else if ((length == 2) && (memcmp(payload, "ON", 2) == 0)) {
     lights.on();
     mqtt_publish_state();
+    Serial.println(F("Lights ON"));
   }
 }
 
 void setup() {
   prevLeds = 500;
-  pinMode(D5, OUTPUT);
-  digitalWrite(D5, LOW);
+  pinMode(LIGHT_PIN, OUTPUT);
+  digitalWrite(LIGHT_PIN, LOW);
   Serial.begin(115200);
   delay(500);
   Serial.println("Intialized");
@@ -101,13 +113,14 @@ void setup() {
   lights.setSkipInfo(_skip, 3);
   mqtt.setServer(mqtt_server, 1883);
   mqtt.setCallback(mqtt_callback);
+  uptime.reset();
 }
 
 bool check_wifi() {
   uint8_t wifi_status = WiFi.status();
   static bool wifi_connecting = false;
   if ((wifi_status != WL_CONNECTED) && !wifi_connecting) {
-    digitalWrite(D5, LOW);
+    digitalWrite(LIGHT_PIN, LOW);
     Serial.print("Connecting to ");
     Serial.print(WiFi_SSID);
     Serial.println("...");
@@ -116,7 +129,7 @@ bool check_wifi() {
   } else if (wifi_connecting && (wifi_status != 7)) {
     wifi_connecting = false;
     if (wifi_status == WL_CONNECTED) {
-      digitalWrite(D5, HIGH);
+      digitalWrite(LIGHT_PIN, HIGH);
       Serial.println();
       Serial.print("WiFi connected to ");
       Serial.print(WiFi_SSID);
@@ -157,6 +170,7 @@ void check_mqtt() {
       mqtt_topicConfig = String("homeassistant/switch/window_led/") + deviceId + "/config";
       mqtt_topicSet = String("homeassistant/switch/window_led/") + deviceId + "/set";
       mqtt_topicState = String("homeassistant/switch/window_led/") + deviceId + "/state";
+      mqtt_topicUptime = String("homeassistant/switch/window_led/") + deviceId + "/uptime";
       String payload = String("{\"name\": \"Window.Led\", \"command_topic\": \"") + mqtt_topicSet
         + String("\", \"state_topic\": \"") + mqtt_topicState + String("\"}");
       mqtt.publish(mqtt_topicConfig.c_str(), payload.c_str());
@@ -181,11 +195,16 @@ void loop() {
     prevLeds = prevLeds + DELAY;
     lights.loop();
   }
+  uptime.loop();
   if (now - prevWifi >= WIFI_CHECK_PERIOD) {
     prevWifi = now;
     if (check_wifi()) {
       check_mqtt();
       if (mqtt.connected()) {
+        if (prevMinutes != uptime.info.minutes) {
+          mqtt_publish_uptime();
+          prevMinutes = uptime.info.minutes;
+        }
         mqtt.loop();
       }
     }
