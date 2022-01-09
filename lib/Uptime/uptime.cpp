@@ -41,12 +41,8 @@ namespace Nezumikun {
     if (this->info.days > 0) {
       res += String(this->info.days) + " d. ";
     }
-    if ((this->info.days > 0) || (this->info.hours > 0)) {
-      res += (this->info.hours < 10 ? "0" : "") +  String(this->info.hours) + ":";
-    }
-    if ((this->info.days > 0) || (this->info.hours > 0) || (this->info.minutes > 0)) {
-      res += (this->info.minutes < 10 ? "0" : "") +  String(this->info.minutes) + ":";
-    }
+    res += (this->info.hours < 10 ? "0" : "") +  String(this->info.hours) + ":";
+    res += (this->info.minutes < 10 ? "0" : "") +  String(this->info.minutes) + ":";
     res += (this->info.seconds < 10 ? "0" : "") +  String(this->info.seconds);
     return res;
   }
