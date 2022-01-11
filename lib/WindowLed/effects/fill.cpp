@@ -35,7 +35,7 @@ namespace Nezumikun {
       // this->effectFade->reset();
       this->fade = false;
       Effect::reset();
-      if (Settings::debugLevel >= DebugLevel::Debug) {
+      //if (Settings::debugLevel >= DebugLevel::Debug) {
         Serial.print("EffectFill.reset");
         Serial.print(" Direction = ");
         Serial.print(this->currentDirection == Effect::Direction::Horizontal ? "Horizontal" : "Vertical");
@@ -44,7 +44,7 @@ namespace Nezumikun {
         Serial.print(" FillStyle = ");
         Serial.print(this->currentFillStyle == FillStyle::NewLine ? "NewLine" : "Continue");
         Serial.println();
-      }
+      //}
     }
 
     void EffectFill::newLine() {

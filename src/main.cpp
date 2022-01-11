@@ -5,6 +5,7 @@
 #define FASTLED_INTERRUPT_RETRY_COUNT 1
 #include "lights.h"
 #include "uptime.h"
+#include "LED.h"
 
 //#define TEST
 
@@ -68,7 +69,7 @@ String mqtt_topicSet;
 String mqtt_topicState;
 String mqtt_topicUptime;
 
-#define LIGHT_PIN D1
+Nezumikun::LED led_wifi(D1);
 
 void mqtt_publish_state() {
   mqtt.publish(mqtt_topicState.c_str(), lights.isOn() ? "ON" : "OFF");
@@ -103,8 +104,6 @@ void mqtt_callback(char* topic, byte* payload, unsigned int length) {
 
 void setup() {
   prevLeds = 500;
-  pinMode(LIGHT_PIN, OUTPUT);
-  digitalWrite(LIGHT_PIN, LOW);
   Serial.begin(115200);
   delay(500);
   Serial.println("Intialized");
@@ -120,7 +119,7 @@ bool check_wifi() {
   uint8_t wifi_status = WiFi.status();
   static bool wifi_connecting = false;
   if ((wifi_status != WL_CONNECTED) && !wifi_connecting) {
-    digitalWrite(LIGHT_PIN, LOW);
+    led_wifi.off();
     Serial.print("Connecting to ");
     Serial.print(WiFi_SSID);
     Serial.println("...");
@@ -129,7 +128,7 @@ bool check_wifi() {
   } else if (wifi_connecting && (wifi_status != 7)) {
     wifi_connecting = false;
     if (wifi_status == WL_CONNECTED) {
-      digitalWrite(LIGHT_PIN, HIGH);
+      led_wifi.blink(500);
       Serial.println();
       Serial.print("WiFi connected to ");
       Serial.print(WiFi_SSID);
@@ -209,4 +208,5 @@ void loop() {
       }
     }
   }
+  led_wifi.touch();
 }

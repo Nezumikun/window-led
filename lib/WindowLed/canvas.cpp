@@ -39,6 +39,20 @@ namespace Nezumikun {
     }
 
     uint16_t Canvas::XY(uint8_t x, uint8_t y) {
+      if (x >= this->width) {
+        Serial.print("X more then canvas width! ");
+        Serial.print(x);
+        Serial.print(" >= ");
+        Serial.println(this->width);
+        x = this->width - 1;
+      }
+      if (y >= this->height) {
+        Serial.print("Y more then canvas height! ");
+        Serial.print(y);
+        Serial.print(" >= ");
+        Serial.println(this->height);
+        y = this->height - 1;
+      }
       return (uint16_t)y * this->width + x;
     }
 
