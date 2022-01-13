@@ -6,7 +6,6 @@ namespace Nezumikun {
     EffectFill::EffectFill(Canvas & canvas, uint8_t framePerSecond) : Effect (canvas, framePerSecond) {
       this->angleStep = (uint8_t)((uint16_t) 128 * 25 / 2 / framePerSecond);
       this->effectFade = new EffectFade(canvas, framePerSecond);
-      this->reset();
     };
 
     void EffectFill::reset() {
@@ -30,6 +29,7 @@ namespace Nezumikun {
       this->hue = random(255);
       this->dh = ((random(255) & 0x01) == 1 ? -1 : 1) * (15 + random(30));
       this->canvas->setBrightness(255);
+      this->canvas->setRotateRandom();
       this->riseEnd = false;
       this->canvas->fill(CRGB(0, 0, 0));
       // this->effectFade->reset();

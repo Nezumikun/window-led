@@ -10,12 +10,12 @@ namespace Nezumikun {
       this->leds = (CRGB *) malloc((width * height) * sizeof(CRGB));
     }
 
-    uint8_t Canvas::getWidth() {
-      return this->width;
+    uint8_t Canvas::getWidth(bool useRotateSettings) {
+      return (!useRotateSettings || (this->anngle == Rotate::None) || (this->anngle == Rotate::Angle180)) ? this->width : this->height;
     };
 
-    uint8_t Canvas::getHeight() {
-      return this->height;
+    uint8_t Canvas::getHeight(bool useRotateSettings) {
+      return (!useRotateSettings || (this->anngle == Rotate::None) || (this->anngle == Rotate::Angle180)) ? this->height : this->width;
     };
 
     uint16_t Canvas::getLedsNumber() {
@@ -38,22 +38,33 @@ namespace Nezumikun {
       fill_solid(this->leds, this->ledsNumber, color);
     }
 
-    uint16_t Canvas::XY(uint8_t x, uint8_t y) {
-      if (x >= this->width) {
+    uint16_t Canvas::XY(uint8_t x, uint8_t y, bool useRotateSettings) {
+      if (x >= this->getWidth(useRotateSettings)) {
         Serial.print("X more then canvas width! ");
         Serial.print(x);
         Serial.print(" >= ");
-        Serial.println(this->width);
-        x = this->width - 1;
+        Serial.println(this->getWidth(useRotateSettings));
+        x = this->getWidth(useRotateSettings) - 1;
       }
-      if (y >= this->height) {
+      if (y >= this->getHeight(useRotateSettings)) {
         Serial.print("Y more then canvas height! ");
         Serial.print(y);
         Serial.print(" >= ");
-        Serial.println(this->height);
-        y = this->height - 1;
+        Serial.println(this->getHeight(useRotateSettings));
+        y = this->getHeight(useRotateSettings) - 1;
       }
-      return (uint16_t)y * this->width + x;
+      return (this->anngle == Rotate::Angle90) ? (uint16_t)(this->height - 1 - x) * this->width + y
+        : (this->anngle == Rotate::Angle180) ? (uint16_t)(this->height - 1 - y) * this->width + (this->width - 1 - x)
+        : (this->anngle == Rotate::Angle270) ? (uint16_t)x * this->width + (this->width - 1 - y)
+        : (uint16_t)y * this->width + x;
+    }
+
+    void Canvas::setRotate(Rotate angle) {
+      this->anngle = angle;
+    }
+
+    void Canvas::setRotateRandom() {
+      this->anngle = (Rotate) (random(255) & 0x03);
     }
 
   }

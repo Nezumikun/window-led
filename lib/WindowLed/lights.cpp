@@ -69,11 +69,11 @@ namespace Nezumikun {
 
     void Lights::show() {
       CRGB * canvasLeds = this->canvas->getLeds();
-      uint8_t width = this->canvas->getWidth();
-      for (uint8_t y = 0; y < this->canvas->getHeight(); y++) {
+      uint8_t width = this->canvas->getWidth(false);
+      for (uint8_t y = 0; y < this->canvas->getHeight(false); y++) {
         for (uint8_t x = 0; x < width; x++) {
           // Serial.println(String("x = ") + x + " y = " + y);
-          this->leds[this->XY(x, y)] = canvasLeds[y * width + x];
+          this->leds[this->XY(x, y)] = canvasLeds[(uint16_t)y * width + x];
         }
       }
       for (uint8_t i = 0; i < this->skipCount; i++) {
