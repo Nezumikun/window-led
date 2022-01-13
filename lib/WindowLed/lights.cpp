@@ -41,8 +41,8 @@ namespace Nezumikun {
     uint16_t Lights::XY(uint8_t x, uint8_t y) {
       uint8_t tx = x;
       uint8_t ty = y;
-      uint8_t tw = this->canvas->getWidth();
-      uint8_t th = this->canvas->getHeight();
+      uint8_t tw = this->canvas->getWidth(false);
+      uint8_t th = this->canvas->getHeight(false);
       uint16_t p = 0;
       if (this->startAt == StartAt::BottomLeft && linesDirection == LinesDirection::Hotizontal) {
         p = ty * tw + (((ty & 1) == 1) ? (tw - tx - 1) : tx);

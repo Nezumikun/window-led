@@ -8,6 +8,7 @@ namespace Nezumikun {
       this->height = height;
       this->ledsNumber = (uint16_t)width * height;
       this->leds = (CRGB *) malloc((width * height) * sizeof(CRGB));
+      this->anngle = Rotate::None;
     }
 
     uint8_t Canvas::getWidth(bool useRotateSettings) {
