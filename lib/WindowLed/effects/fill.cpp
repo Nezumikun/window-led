@@ -67,8 +67,8 @@ namespace Nezumikun {
         }
         return;
       }
-      //if (Settings::debugLevel >= DebugLevel::Debug) {
-      if ((this->canvas->getRotate() == Canvas::Rotate::Angle90) || (this->canvas->getRotate() == Canvas::Rotate::Angle270)) {
+      if (Settings::debugLevel >= DebugLevel::Debug) {
+      //if ((this->canvas->getRotate() == Canvas::Rotate::Angle90) || (this->canvas->getRotate() == Canvas::Rotate::Angle270)) {
         Serial.print(F("EffectFill.loop"));
         Serial.print(F(" x = "));
         Serial.print(this->x);

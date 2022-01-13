@@ -72,11 +72,11 @@ namespace Nezumikun {
           );
           if (Settings::debugLevel >= DebugLevel::Debug) {
             Serial.print(F("EffectInit.loop :: fill "));
-            Serial.println((this->mode == Mode::Red) ? "Red"
-              : (this->mode == Mode::Green) ? "Green"
-              : (this->mode == Mode::Blue) ? "Blue"
-              : (this->mode == Mode::White) ? "White"
-              : "Black"
+            Serial.println((this->mode == Mode::Red) ? F("Red")
+              : (this->mode == Mode::Green) ? F("Green")
+              : (this->mode == Mode::Blue) ? F("Blue")
+              : (this->mode == Mode::White) ? F("White")
+              : F("Black")
             );
           }
           this->subMode = SubMode::Rise;
@@ -92,13 +92,13 @@ namespace Nezumikun {
         if (this->effectFade->endOfEffect()) {
           if (Settings::debugLevel >= DebugLevel::Debug) {
             Serial.print(F("EffectInit.loop :: "));
-            Serial.print((this->mode == Mode::Red) ? "Red"
-              : (this->mode == Mode::Green) ? "Green"
-              : (this->mode == Mode::Blue) ? "Blue"
-              : (this->mode == Mode::White) ? "White"
-              : "Black"
+            Serial.print((this->mode == Mode::Red) ? F("Red")
+              : (this->mode == Mode::Green) ? F("Green")
+              : (this->mode == Mode::Blue) ? F("Blue")
+              : (this->mode == Mode::White) ? F("White")
+              : F("Black")
             );
-            Serial.println(" fade end");
+            Serial.println(F(" fade end"));
           }
           this->mode = (this->mode == Mode::Red) ? Mode::Green
             : (this->mode == Mode::Green) ? Mode::Blue

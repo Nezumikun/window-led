@@ -12,7 +12,7 @@ namespace Nezumikun {
     void EffectWithTime::reset() {
       this->frame = 0;
       if (Settings::debugLevel >= DebugLevel::Debug) {
-        Serial.println("EffectWithTime.reset");
+        Serial.println(F("EffectWithTime.reset"));
       }
       Effect::reset();
     }
