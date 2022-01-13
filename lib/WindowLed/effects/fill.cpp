@@ -6,6 +6,8 @@ namespace Nezumikun {
     EffectFill::EffectFill(Canvas & canvas, uint8_t framePerSecond) : Effect (canvas, framePerSecond) {
       this->angleStep = (uint8_t)((uint16_t) 128 * 25 / 2 / framePerSecond);
       this->effectFade = new EffectFade(canvas, framePerSecond);
+      this->reset();
+      this->firstCall = true;
     };
 
     void EffectFill::reset() {
@@ -36,13 +38,16 @@ namespace Nezumikun {
       this->fade = false;
       Effect::reset();
       //if (Settings::debugLevel >= DebugLevel::Debug) {
-        Serial.print("EffectFill.reset");
-        Serial.print(" Direction = ");
-        Serial.print(this->currentDirection == Effect::Direction::Horizontal ? "Horizontal" : "Vertical");
-        Serial.print(" FillColorStyle = ");
-        Serial.print(this->currentFillColorStyle == FillColorStyle::SolidColor ? "SolidColor" : this->currentFillColorStyle == FillColorStyle::HueShift ? "HueShift" : "RandomColorForEachDot");
-        Serial.print(" FillStyle = ");
-        Serial.print(this->currentFillStyle == FillStyle::NewLine ? "NewLine" : "Continue");
+        Serial.print(F("EffectFill.reset"));
+        Serial.print(F(" Direction = "));
+        Serial.print(this->currentDirection == Effect::Direction::Horizontal ? F("Horizontal") : F("Vertical"));
+        Serial.print(F(" FillColorStyle = "));
+        Serial.print(this->currentFillColorStyle == FillColorStyle::SolidColor ? F("SolidColor") : this->currentFillColorStyle == FillColorStyle::HueShift ? F("HueShift") : F("RandomColorForEachDot"));
+        Serial.print(F(" FillStyle = "));
+        Serial.print(this->currentFillStyle == FillStyle::NewLine ? F("NewLine") : F("Continue"));
+        Serial.print(F(" CanvasRotate = "));
+        Canvas::Rotate rotate = this->canvas->getRotate();
+        Serial.print(rotate == Canvas::Rotate::None ? F("None") : rotate == Canvas::Rotate::Angle90 ? F("Angle90") : rotate == Canvas::Rotate::Angle180 ? F("Angle180") : F("Angle270"));
         Serial.println();
       //}
     }
@@ -62,21 +67,25 @@ namespace Nezumikun {
         }
         return;
       }
-      if (Settings::debugLevel >= DebugLevel::Debug) {
-      //if (this->currentFillStyle == FillStyle::Continue) {
-        Serial.print("EffectFill.loop");
-        Serial.print(" x = ");
+      //if (Settings::debugLevel >= DebugLevel::Debug) {
+      if ((this->canvas->getRotate() == Canvas::Rotate::Angle90) || (this->canvas->getRotate() == Canvas::Rotate::Angle270)) {
+        Serial.print(F("EffectFill.loop"));
+        Serial.print(F(" x = "));
         Serial.print(this->x);
-        Serial.print(" (width = ");
+        Serial.print(F(" (width = "));
         Serial.print(this->canvas->getWidth());
-        Serial.print(")");
-        Serial.print(" y = ");
+        Serial.print(F(")"));
+        Serial.print(F(" y = "));
         Serial.print(this->y);
-        Serial.print(" (height = ");
+        Serial.print(F(" (height = "));
         Serial.print(this->canvas->getHeight());
-        Serial.print(")");
-        Serial.print(" hue = ");
+        Serial.print(F(")"));
+        Serial.print(F(" hue = "));
         Serial.print(this->hue);
+        Serial.print(F(" Canvas: x = "));
+        Serial.print(this->canvas->X(x, y));
+        Serial.print(F(" Canvas: y = "));
+        Serial.print(this->canvas->Y(x, y));
         Serial.println();
       }
       this->canvas->getLeds()[this->canvas->XY(this->x, this->y)].setHSV(this->hue, 255, sin8(this->angle - 64));

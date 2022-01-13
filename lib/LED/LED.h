@@ -19,7 +19,7 @@ namespace Nezumikun {
       unsigned long     time = 0;
       int               state = LOW;
     public:
-      LED (int pin);
+      explicit LED(int pin);
       void on();
       void off();
       void blink(unsigned int interval);

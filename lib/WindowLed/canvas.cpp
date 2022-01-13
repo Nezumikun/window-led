@@ -38,25 +38,50 @@ namespace Nezumikun {
       fill_solid(this->leds, this->ledsNumber, color);
     }
 
-    uint16_t Canvas::XY(uint8_t x, uint8_t y, bool useRotateSettings) {
+    uint8_t Canvas::X(uint8_t x, uint8_t y, bool useRotateSettings) {
       if (x >= this->getWidth(useRotateSettings)) {
-        Serial.print("X more then canvas width! ");
+        Serial.print(F("X more then canvas width! "));
         Serial.print(x);
-        Serial.print(" >= ");
+        Serial.print(F(" >= "));
         Serial.println(this->getWidth(useRotateSettings));
         x = this->getWidth(useRotateSettings) - 1;
       }
       if (y >= this->getHeight(useRotateSettings)) {
-        Serial.print("Y more then canvas height! ");
+        Serial.print(F("Y more then canvas height! "));
         Serial.print(y);
-        Serial.print(" >= ");
+        Serial.print(F(" >= "));
         Serial.println(this->getHeight(useRotateSettings));
         y = this->getHeight(useRotateSettings) - 1;
       }
-      return (this->anngle == Rotate::Angle90) ? (uint16_t)(this->height - 1 - x) * this->width + y
-        : (this->anngle == Rotate::Angle180) ? (uint16_t)(this->height - 1 - y) * this->width + (this->width - 1 - x)
-        : (this->anngle == Rotate::Angle270) ? (uint16_t)x * this->width + (this->width - 1 - y)
-        : (uint16_t)y * this->width + x;
+      return (this->anngle == Rotate::Angle90) ? y
+        : (this->anngle == Rotate::Angle180) ? this->width - 1 - x
+        : (this->anngle == Rotate::Angle270) ? this->width - 1 - y
+        : x;
+    }
+
+    uint8_t Canvas::Y(uint8_t x, uint8_t y, bool useRotateSettings) {
+      if (x >= this->getWidth(useRotateSettings)) {
+        Serial.print(F("X more then canvas width! "));
+        Serial.print(x);
+        Serial.print(F(" >= "));
+        Serial.println(this->getWidth(useRotateSettings));
+        x = this->getWidth(useRotateSettings) - 1;
+      }
+      if (y >= this->getHeight(useRotateSettings)) {
+        Serial.print(F("Y more then canvas height! "));
+        Serial.print(y);
+        Serial.print(F(" >= "));
+        Serial.println(this->getHeight(useRotateSettings));
+        y = this->getHeight(useRotateSettings) - 1;
+      }
+      return (this->anngle == Rotate::Angle90) ? this->height - 1 - x
+        : (this->anngle == Rotate::Angle180) ? this->height - 1 - y
+        : (this->anngle == Rotate::Angle270) ? x
+        : y;
+    }
+
+    uint16_t Canvas::XY(uint8_t x, uint8_t y, bool useRotateSettings) {
+      return (uint16_t)this->Y(x, y, useRotateSettings) * this->width + this->X(x, y, useRotateSettings);
     }
 
     void Canvas::setRotate(Rotate angle) {
@@ -65,6 +90,10 @@ namespace Nezumikun {
 
     void Canvas::setRotateRandom() {
       this->anngle = (Rotate) (random(255) & 0x03);
+    }
+
+    Canvas::Rotate Canvas::getRotate() {
+      return this->anngle;
     }
 
   }

@@ -8,6 +8,7 @@ namespace Nezumikun {
       this->effectRise = new EffectRise(canvas, framePerSecond, timeInMilliseconds);
       this->effectFade = new EffectFade(canvas, framePerSecond, timeInMilliseconds);
       this->reset();
+      this->firstCall = true;
     };
 
     EffectInit::~EffectInit() {
@@ -22,7 +23,7 @@ namespace Nezumikun {
       this->randomInfo.hue = random(255);
       this->randomInfo.brightness = 0;
       if (Settings::debugLevel >= DebugLevel::Debug) {
-        Serial.print("EffectInit.reset");
+        Serial.print(F("EffectInit.reset"));
       }
       EffectWithTime::reset();
     }
@@ -52,12 +53,12 @@ namespace Nezumikun {
               this->randomInfo.brightness = 0;
             }
             if (Settings::debugLevel >= DebugLevel::Debug) {
-              Serial.print("EffectInit.loop :: Mode = Random");
-              Serial.print(" Index = ");
+              Serial.print(F("EffectInit.loop :: Mode = Random"));
+              Serial.print(F(" Index = "));
               Serial.print(this->randomInfo.index);
-              Serial.print(" Hue = ");
+              Serial.print(F(" Hue = "));
               Serial.print(this->randomInfo.hue);
-              Serial.print(" Brightness = ");
+              Serial.print(F(" Brightness = "));
               Serial.print(this->randomInfo.brightness);
               Serial.println();
             }
@@ -70,7 +71,7 @@ namespace Nezumikun {
             : CRGB(0, 0, 0)
           );
           if (Settings::debugLevel >= DebugLevel::Debug) {
-            Serial.print("EffectInit.loop :: fill ");
+            Serial.print(F("EffectInit.loop :: fill "));
             Serial.println((this->mode == Mode::Red) ? "Red"
               : (this->mode == Mode::Green) ? "Green"
               : (this->mode == Mode::Blue) ? "Blue"
@@ -90,7 +91,7 @@ namespace Nezumikun {
         this->effectFade->loop();
         if (this->effectFade->endOfEffect()) {
           if (Settings::debugLevel >= DebugLevel::Debug) {
-            Serial.print("EffectInit.loop :: ");
+            Serial.print(F("EffectInit.loop :: "));
             Serial.print((this->mode == Mode::Red) ? "Red"
               : (this->mode == Mode::Green) ? "Green"
               : (this->mode == Mode::Blue) ? "Blue"

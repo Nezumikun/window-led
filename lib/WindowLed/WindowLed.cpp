@@ -217,13 +217,13 @@ namespace Nezumikun {
           }
         }
         /*
-        Serial.print("i = ");
+        Serial.print(F("i = "));
         Serial.print(i);
-        Serial.print(" fade = ");
+        Serial.print(F(" fade = "));
         Serial.print(params[i].fade);
-        Serial.print(" hue = ");
+        Serial.print(F(" hue = "));
         Serial.print(params[i].hue);
-        Serial.print(" value = ");
+        Serial.print(F(" value = "));
         Serial.println(params[i].value);
         */
       }
@@ -274,13 +274,13 @@ namespace Nezumikun {
           dy = -1;
         }
         Serial.print(__FUNCTION__);
-        Serial.print(" ");
+        Serial.print(F(" "));
         Serial.print(direction == LINES_HORIZONTAL ? "HORIZONTAL" : "VERTICAL");
-        Serial.print(" ");
+        Serial.print(F(" "));
         Serial.print(start_point == START_AT_TOPLEFT ? "TOPLEFT" : start_point == START_AT_TOPRIGHT ? "TOPRIGHT" : start_point == START_AT_BOTTOMLEFT ? "BOTTOMLEFT" : "BOTTOMRIGHT");
-        Serial.print(" ");
+        Serial.print(F(" "));
         Serial.print(changeColor);
-        Serial.print(" ");
+        Serial.print(F(" "));
         Serial.println(hue);
         FastLED.clearData();
       }
@@ -352,9 +352,9 @@ namespace Nezumikun {
         direction = ((hue & 1) == 0) ? LINES_HORIZONTAL : LINES_VERTICAL;
         shift = 0;
         Serial.print(__FUNCTION__);
-        Serial.print(" ");
+        Serial.print(F(" "));
         Serial.print(direction == LINES_HORIZONTAL ? "HORIZONTAL" : "VERTICAL");
-        Serial.print(" ");
+        Serial.print(F(" "));
         Serial.println(hue);
         FastLED.clearData();
       }
@@ -411,16 +411,16 @@ namespace Nezumikun {
         FastLED.clearData();
         // Serial.println();
         Serial.print(__FUNCTION__);
-        Serial.print(" ");
+        Serial.print(F(" "));
         Serial.print(changeColor ? dh : 0);
         Serial.println(changeColor ? " ChangeColor" : " Mono");
       }
       setHueXY(x, y, hue);
-      /* Serial.print("(");
+      /* Serial.print(F("("));
       Serial.print(x);
-      Serial.print(",");
+      Serial.print(F(","));
       Serial.print(y);
-      Serial.print(") ");*/
+      Serial.print(F(") "));*/
       if (dx > 0) {
         if (l == 0) {
           // Serial.println();
@@ -548,9 +548,9 @@ namespace Nezumikun {
 
     uint8_t WindowLed::getEffectTimes(unsigned char index) {
       /*
-      Serial.print("getEffectTimes index = ");
+      Serial.print(F("getEffectTimes index = "));
       Serial.print(index);
-      Serial.print(" times limit = ");
+      Serial.print(F(" times limit = "));
       Serial.println(effectList[index].times);
       */
       return effectList[index].times > 0 ? effectList[index].times : (random(-effectList[index].times) + 1);
@@ -559,9 +559,9 @@ namespace Nezumikun {
     void WindowLed::showCurrentSequence(unsigned long now) {
       Serial.println();
       Serial.print(now);
-      Serial.print(" Seq = ");
+      Serial.print(F(" Seq = "));
       Serial.print(currentEffect);
-      Serial.print(" t = ");
+      Serial.print(F(" t = "));
       Serial.print(currentTime);
       Serial.println();
     }
@@ -593,7 +593,7 @@ namespace Nezumikun {
             break;
         }
         FastLED.show(100);
-        Serial.print(".");
+        Serial.print(F("."));
         if (firstStart) {
           if (--currentTime <= 0) {
             currentEffect++;

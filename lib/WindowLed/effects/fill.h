@@ -34,8 +34,8 @@ namespace Nezumikun {
         bool fade;
       public:
         EffectFill(Canvas & canvas, uint8_t framePerSecond);
-        virtual void reset();
-        virtual void loop();
+        virtual void reset() override;
+        virtual void loop() override;
     };
 
   }

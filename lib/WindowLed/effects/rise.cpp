@@ -6,18 +6,17 @@ namespace Nezumikun {
 
     void EffectRise::loop() {
       EffectWithTime::loop();
-      uint16_t currentTime = (uint16_t)this->frame * 1000 / this->framePerSecond;
-      uint8_t angle = (uint8_t)(128 * currentTime / this->timeInMilliseconds) - 64;
-      //uint8_t brightness = ((uint16_t)sin8(angle) * 100 / 255);
+      uint32_t currentTime = (uint32_t)this->frame * 1000 / this->framePerSecond;
+      uint8_t angle = (uint8_t)(currentTime * 128 / this->timeInMilliseconds) - 64;
       uint8_t brightness = sin8(angle);
       if (Settings::debugLevel >= DebugLevel::Debug) {
-        Serial.print("EffectRise.loop :: Frame = ");
+        Serial.print(F("EffectRise.loop :: Frame = "));
         Serial.print(this->frame);
-        Serial.print(" currentTime = ");
+        Serial.print(F(" currentTime = "));
         Serial.print(currentTime);
-        Serial.print(" Angle = ");
+        Serial.print(F(" Angle = "));
         Serial.print(angle);
-        Serial.print(" value = ");
+        Serial.print(F(" value = "));
         Serial.print(brightness);
         Serial.println();
       }

@@ -6,6 +6,7 @@ namespace Nezumikun {
 
     EffectWithTime::EffectWithTime(Canvas & canvas, uint8_t framePerSecond, uint16_t timeInMilliseconds) : Effect(canvas, framePerSecond) {
       this->timeInMilliseconds = timeInMilliseconds;
+      this->frame = 0;
     };
 
     void EffectWithTime::reset() {

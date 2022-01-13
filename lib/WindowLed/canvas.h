@@ -29,9 +29,12 @@ namespace Nezumikun {
         uint16_t getLedsNumber();
         void setBrightness(uint8_t brightness);
         CRGB * getLeds();
+        uint8_t X(uint8_t x, uint8_t y, bool useRotateSettings = true);
+        uint8_t Y(uint8_t x, uint8_t y, bool useRotateSettings = true);
         uint16_t XY(uint8_t x, uint8_t y, bool useRotateSettings = true);
         void fill(const struct CRGB & color);
         void setRotate(Rotate angle);
+        Rotate getRotate();
         void setRotateRandom();
     };
 

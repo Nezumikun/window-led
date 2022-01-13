@@ -13,6 +13,7 @@ namespace Nezumikun {
       this->effectFade = new EffectFade(*canvas, framePerSecond, timeInMilliseconds);
       this->effectFill = new EffectFill(*canvas, framePerSecond);
       this->mode = Mode::Init;
+      this->saveMode = this->mode;
       this->startAt = StartAt::BottomLeft;
       this->linesDirection = LinesDirection::Vertical;
       for (uint16_t i = 0; i < ledsNumber; i++) {
@@ -25,12 +26,12 @@ namespace Nezumikun {
       this->skip = skip;
       this->skipCount = count;
       if (Settings::debugLevel >= DebugLevel::Debug) {
-        Serial.print("Lights.setSkipInfo :: Skip count = ");
+        Serial.print(F("Lights.setSkipInfo :: Skip count = "));
         Serial.println(this->skipCount);
         for (uint8_t i = 0; i < this->skipCount; i++) {
-          Serial.print(" start = ");
+          Serial.print(F(" start = "));
           Serial.print(this->skip[i].start);
-          Serial.print(" length = ");
+          Serial.print(F(" length = "));
           Serial.print(this->skip[i].length);
           Serial.println();
         }
@@ -118,6 +119,8 @@ namespace Nezumikun {
             this->mode = this->saveMode;
             this->canvas->setBrightness(255);
           }
+          break;
+        case Mode::Wait:
           break;
       }
     }
