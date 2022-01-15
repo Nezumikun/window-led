@@ -2,7 +2,7 @@
 #define WINDOWLED_EFFECT_INIT
 
 #include "with_time.h"
-#include "rise.h"
+#include "blink.h"
 #include "fade.h"
 
 namespace Nezumikun {
@@ -10,19 +10,14 @@ namespace Nezumikun {
 
     class EffectInit: public EffectWithTime {
       protected:
-        struct RandomInfo {
-          uint16_t index = 0;
-          uint8_t hue;
-          uint8_t brightness;
-        } randomInfo;
         enum class Mode {
           Red, Green, Blue, White, Random, End
         } mode;
         enum class SubMode {
-          Rise, Fade, Draw
+          Draw, Blink
         } subMode;
-        EffectRise *effectRise;
         EffectFade *effectFade;
+        EffectBlink *effectBlink;
       public:
         EffectInit(Canvas & canvas, uint8_t framePerSecond, uint16_t timeInMilliseconds = 1000);
         ~EffectInit();

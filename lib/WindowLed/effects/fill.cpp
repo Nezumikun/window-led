@@ -4,7 +4,7 @@ namespace Nezumikun {
   namespace WindowLed {
 
     EffectFill::EffectFill(Canvas & canvas, uint8_t framePerSecond) : Effect (canvas, framePerSecond) {
-      this->angleStep = (uint8_t)((uint16_t) 128 * 25 / 2 / framePerSecond);
+      this->angleStep = (uint8_t)((uint16_t) 128 * 25 / 4 / framePerSecond);
       this->effectFade = new EffectFade(canvas, framePerSecond);
       this->reset();
       this->firstCall = true;
@@ -37,7 +37,7 @@ namespace Nezumikun {
       // this->effectFade->reset();
       this->fade = false;
       Effect::reset();
-      //if (Settings::debugLevel >= DebugLevel::Debug) {
+      if (Settings::debugLevel >= DebugLevel::Debug) {
         Serial.print(F("EffectFill.reset"));
         Serial.print(F(" Direction = "));
         Serial.print(this->currentDirection == Effect::Direction::Horizontal ? F("Horizontal") : F("Vertical"));
@@ -49,7 +49,7 @@ namespace Nezumikun {
         Canvas::Rotate rotate = this->canvas->getRotate();
         Serial.print(rotate == Canvas::Rotate::None ? F("None") : rotate == Canvas::Rotate::Angle90 ? F("Angle90") : rotate == Canvas::Rotate::Angle180 ? F("Angle180") : F("Angle270"));
         Serial.println();
-      //}
+      }
     }
 
     void EffectFill::newLine() {

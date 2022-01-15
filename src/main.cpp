@@ -179,6 +179,7 @@ void loop() {
     lights.loop();
   }
   uptime.loop();
+  //delay(200);
 #ifndef WITHOUT_WIFI
   if (now - prevWifi >= WIFI_CHECK_PERIOD) {
     prevWifi = now;

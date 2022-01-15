@@ -8,7 +8,7 @@ namespace Nezumikun {
       this->ledsNumber = ledsNumber;
       this->framePerSecond = framePerSecond;
       this->canvas = new Canvas(width, height);
-      this->effectInit = new EffectInit(*canvas, framePerSecond, timeInMilliseconds);
+      this->effectInit = new EffectInit(*canvas, framePerSecond, timeInMilliseconds * 2);
       this->effectRise = new EffectRise(*canvas, framePerSecond, timeInMilliseconds);
       this->effectFade = new EffectFade(*canvas, framePerSecond, timeInMilliseconds);
       this->effectFill = new EffectFill(*canvas, framePerSecond);
