@@ -1,4 +1,5 @@
 #include "canvas.h"
+#include "settings.h"
 
 namespace Nezumikun {
   namespace WindowLed {
@@ -36,6 +37,15 @@ namespace Nezumikun {
     };
 
     void Canvas::fill(const struct CRGB & color) {
+      if (Settings::debugLevel >= DebugLevel::Debug) {
+        Serial.print(F("Canvas.fill :: R = "));
+        Serial.print(color.r);
+        Serial.print(F(" G = "));
+        Serial.print(color.g);
+        Serial.print(F("B = "));
+        Serial.print(color.b);
+        Serial.println();
+      }
       fill_solid(this->leds, this->ledsNumber, color);
     }
 

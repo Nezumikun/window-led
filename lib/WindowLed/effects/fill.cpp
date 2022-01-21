@@ -4,11 +4,17 @@ namespace Nezumikun {
   namespace WindowLed {
 
     EffectFill::EffectFill(Canvas & canvas, uint8_t framePerSecond) : Effect (canvas, framePerSecond) {
-      this->angleStep = (uint8_t)((uint16_t) 128 * 25 / 4 / framePerSecond);
+      this->angleStep = (uint8_t)((uint32_t) 128 * 25 / 4 / framePerSecond);
       this->effectFade = new EffectFade(canvas, framePerSecond);
+      this->dot = new Helpers::Dot(framePerSecond, 250);
       this->reset();
       this->firstCall = true;
     };
+
+    EffectFill::~EffectFill() {
+      delete this->effectFade;
+      delete this->dot;
+    }
 
     void EffectFill::reset() {
       this->x = 0;
@@ -36,6 +42,7 @@ namespace Nezumikun {
       this->canvas->fill(CRGB(0, 0, 0));
       // this->effectFade->reset();
       this->fade = false;
+      this->dot->setColor(this->hue);
       Effect::reset();
       if (Settings::debugLevel >= DebugLevel::Debug) {
         Serial.print(F("EffectFill.reset"));
@@ -67,6 +74,9 @@ namespace Nezumikun {
         }
         return;
       }
+      this->dot->setColor(this->hue);
+      CRGB temp = this->dot->rise();
+      this->canvas->getLeds()[this->canvas->XY(this->x, this->y)] = temp;
       if (Settings::debugLevel >= DebugLevel::Debug) {
       //if ((this->canvas->getRotate() == Canvas::Rotate::Angle90) || (this->canvas->getRotate() == Canvas::Rotate::Angle270)) {
         Serial.print(F("EffectFill.loop"));
@@ -82,17 +92,21 @@ namespace Nezumikun {
         Serial.print(F(")"));
         Serial.print(F(" hue = "));
         Serial.print(this->hue);
+        Serial.print(F(" brightness = "));
+        Serial.print(this->dot->getBrightness());
+        Serial.print(F(" R = "));
+        Serial.print(temp.r);
+        Serial.print(F(" G = "));
+        Serial.print(temp.g);
+        Serial.print(F(" B = "));
+        Serial.print(temp.b);
         Serial.print(F(" Canvas: x = "));
         Serial.print(this->canvas->X(x, y));
-        Serial.print(F(" Canvas: y = "));
+        Serial.print(F(" y = "));
         Serial.print(this->canvas->Y(x, y));
         Serial.println();
       }
-      this->canvas->getLeds()[this->canvas->XY(this->x, this->y)].setHSV(this->hue, 255, sin8(this->angle - 64));
-      this->angle += this->angleStep;
-      if ((this->angle >= 128) && this->riseEnd) {
-        this->angle = 0;
-        this->riseEnd = false;
+      if (this->dot->endOfEffect()) {
         if (this->currentFillColorStyle == Effect::FillColorStyle::RandomColorForEachDot) {
           this->hue = random(255);
         }
@@ -148,10 +162,10 @@ namespace Nezumikun {
           }
         }
       }
-      else if ((this->angle >= 128) && !this->riseEnd) {
-        this->angle = 128;
-        this->riseEnd = true;
-      }
+      //else if ((this->angle >= 128) && !this->riseEnd) {
+      //  this->angle = 128;
+      //  this->riseEnd = true;
+      //}
     }
   }
 }

@@ -3,6 +3,7 @@
 
 #include "effect.h"
 #include "fade.h"
+#include "../helpers/dot.h"
 
 namespace Nezumikun {
   namespace WindowLed {
@@ -30,10 +31,12 @@ namespace Nezumikun {
         int8_t dh;
         uint8_t angleStep;
         uint8_t angle;
+        Helpers::Dot * dot;
         bool riseEnd;
         bool fade;
       public:
         EffectFill(Canvas & canvas, uint8_t framePerSecond);
+        ~EffectFill();
         virtual void reset() override;
         virtual void loop() override;
     };
