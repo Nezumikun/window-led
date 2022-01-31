@@ -12,7 +12,7 @@ namespace Nezumikun {
           CRGB originalColor;
           CRGB color;
           uint8_t framePerSecond;
-          uint16_t timeInMilliseconds;
+          uint32_t timeInMilliseconds;
           bool firstCall = true;
           bool lastCall = false;
           uint8_t frame = 0;
@@ -21,7 +21,7 @@ namespace Nezumikun {
           bool isFirstCall();
           bool isLastCall();
         public:
-          Dot(uint8_t framePerSecond, uint16_t timeInMilliseconds = 1000);
+          Dot(uint8_t framePerSecond, uint32_t timeInMilliseconds = 1000);
           void setColor(CRGB color);
           void setColor(uint8_t hue);
           CRGB getColor();

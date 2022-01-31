@@ -8,10 +8,10 @@ namespace Nezumikun {
 
     class EffectWithTime: public Effect {
       protected:
-        uint8_t frame;
-        uint16_t timeInMilliseconds;
+        uint32_t frame;
+        uint32_t timeInMilliseconds;
       public:
-        EffectWithTime(Canvas & canvas, uint8_t framePerSecond, uint16_t timeInMilliseconds = 1000);
+        EffectWithTime(Canvas & canvas, uint8_t framePerSecond, uint32_t timeInMilliseconds = 1000);
         virtual void reset() override;
         virtual void loop() override;
     };

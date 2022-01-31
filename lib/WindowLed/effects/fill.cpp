@@ -20,22 +20,22 @@ namespace Nezumikun {
       this->x = 0;
       this->y = 0;
       if (this->direction == Effect::Direction::Random) {
-        this->currentDirection = ((random(255) & 0x01) == 1) ? Effect::Direction::Vertical : Effect::Direction::Horizontal;
+        this->currentDirection = ((random8(255) & 0x01) == 1) ? Effect::Direction::Vertical : Effect::Direction::Horizontal;
       } else {
         this->currentDirection = this->direction;
       }
       if (this->fillColorStyle == Effect::FillColorStyle::RandomStyle) {
-        this->currentFillColorStyle = (Effect::FillColorStyle) random(3);
+        this->currentFillColorStyle = (Effect::FillColorStyle) random8(3);
       } else {
         this->currentFillColorStyle = this->fillColorStyle;
       }
       if (this->fillStyle == FillStyle::RandomStyle) {
-        this->currentFillStyle = (FillStyle) (random(255) & 0x01);
+        this->currentFillStyle = (FillStyle) (random8(255) & 0x01);
       } else {
         this->currentFillStyle = this->fillStyle;
       }
-      this->hue = random(255);
-      this->dh = ((random(255) & 0x01) == 1 ? -1 : 1) * (15 + random(30));
+      this->hue = random8(255);
+      this->dh = ((random8(255) & 0x01) == 1 ? -1 : 1) * (15 + random8(30));
       this->canvas->setBrightness(255);
       this->canvas->setRotateRandom();
       this->riseEnd = false;
@@ -108,7 +108,7 @@ namespace Nezumikun {
       }
       if (this->dot->endOfEffect()) {
         if (this->currentFillColorStyle == Effect::FillColorStyle::RandomColorForEachDot) {
-          this->hue = random(255);
+          this->hue = random8(255);
         }
         if (this->currentDirection == Effect::Direction::Horizontal) {
           if (this->currentFillStyle == FillStyle::Continue) {

@@ -9,11 +9,15 @@
 
 #define FRAME_PER_SECOND 50
 #define DELAY 1000 / FRAME_PER_SECOND
-#define WIFI_CHECK_PERIOD 500
+#define WIFI_CHECK_PERIOD 5000
 #define NUM_LEDS 50 * 3
 
+#ifndef WIDTH
 #define WIDTH 10
+#endif
+#ifndef HEIGHT
 #define HEIGHT 14
+#endif
 Nezumikun::WindowLed::SkipInfo _skip[3] = {{ 0, 5 } , { 5 + 14, 3 }, { 5 + 14 + 3 + 14 * 2, 2 }};
 
 CRGB leds[NUM_LEDS];
@@ -22,7 +26,7 @@ Nezumikun::Uptime uptime;
 
 #ifndef WITHOUT_WIFI
 #include <ESP8266WiFi.h>
-#include <PubSubClient.h>
+//#include <PubSubClient.h>
 
 byte mac[6];
 String deviceId;
@@ -42,8 +46,8 @@ const char * mqtt_auth = "mqtt";
 char msg[MSG_BUFFER_SIZE];
 
 WiFiClient wifi;
-PubSubClient mqtt(wifi);
-
+//PubSubClient mqtt(wifi);
+/*
 void mqtt_publish_state() {
   mqtt.publish(mqtt_topicState.c_str(), lights.isOn() ? "ON" : "OFF");
 }
@@ -74,7 +78,7 @@ void mqtt_callback(char* topic, byte* payload, unsigned int length) {
     Serial.println(F("Lights ON"));
   }
 }
-
+*/
 bool check_wifi() {
   uint8_t wifi_status = WiFi.status();
   static bool wifi_connecting = false;
@@ -89,10 +93,9 @@ bool check_wifi() {
     wifi_connecting = false;
     if (wifi_status == WL_CONNECTED) {
       led_wifi.blink(500);
-      Serial.println();
       Serial.print(F("WiFi connected to "));
-      Serial.print(WiFi_SSID);
-      Serial.print(F(" IP: "));
+      Serial.println(WiFi_SSID);
+      Serial.print(F("IP: "));
       Serial.println(WiFi.localIP());
       WiFi.macAddress(mac);
       deviceId = String("0x");
@@ -106,7 +109,7 @@ bool check_wifi() {
   }
   return wifi_status == WL_CONNECTED;
 }
-
+/*
 void check_mqtt() {
   static bool mqtt_connecting = false;
   static bool reconnect_pause = false;
@@ -146,8 +149,9 @@ void check_mqtt() {
     }
     mqtt_connecting = false;
   }
-}
-
+} */
+#else
+Nezumikun::LED led_wifi(13);
 #endif
 
 unsigned long prevLeds = 0;
@@ -156,19 +160,29 @@ unsigned char prevMinutes = -1;
 void setup() {
   prevLeds = 500;
   Serial.begin(115200);
+  led_wifi.blink(500);
   delay(500);
-  Serial.println("Intialized");
+  Serial.print("Intialized ");
+  Serial.print(WIDTH);
+  Serial.print("x");
+  Serial.print(HEIGHT);
+  Serial.println();
 #ifdef BOARD_ARDUINO_NANO
   FastLED.addLeds<WS2812B, 2, GRB>(leds, NUM_LEDS);
 #else
   FastLED.addLeds<WS2812B, D2, GRB>(leds, NUM_LEDS);
 #endif
   //Nezumikun::WindowLed::Settings::debugLevel = Nezumikun::WindowLed::DebugLevel::Debug;
+#ifndef DEBUG
   lights.setSkipInfo(_skip, 3);
+#else
+  lights.setStartAt(Nezumikun::WindowLed::Lights::StartAt::BottomLeft);
+  lights.setLinesDirectoin(Nezumikun::WindowLed::Lights::LinesDirection::Horizontal);
+#endif
   uptime.reset();
 #ifndef WITHOUT_WIFI
-  mqtt.setServer(mqtt_server, 1883);
-  mqtt.setCallback(mqtt_callback);
+  //mqtt.setServer(mqtt_server, 1883);
+  //mqtt.setCallback(mqtt_callback);
 #endif
 }
 
@@ -179,23 +193,29 @@ void loop() {
     lights.loop();
   }
   uptime.loop();
-  //delay(200);
+#ifdef DEBUG
+  //delay(50);
+#endif
+  if (prevMinutes != uptime.info.minutes) {
+    String strUptime = uptime.toString();
+    Serial.println(String("Uptime: ") + strUptime);
+    prevMinutes = uptime.info.minutes;
+  }
 #ifndef WITHOUT_WIFI
   if (now - prevWifi >= WIFI_CHECK_PERIOD) {
     prevWifi = now;
     if (check_wifi()) {
-      check_mqtt();
+      /*check_mqtt();
       if (mqtt.connected()) {
         if (prevMinutes != uptime.info.minutes) {
           mqtt_publish_uptime();
           prevMinutes = uptime.info.minutes;
         }
         mqtt.loop();
-      }
+      }*/
     }
   }
-  led_wifi.touch();
 #else
-
 #endif
+  led_wifi.touch();
 }

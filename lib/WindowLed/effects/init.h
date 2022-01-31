@@ -19,7 +19,7 @@ namespace Nezumikun {
         EffectFade *effectFade;
         EffectBlink *effectBlink;
       public:
-        EffectInit(Canvas & canvas, uint8_t framePerSecond, uint16_t timeInMilliseconds = 1000);
+        EffectInit(Canvas & canvas, uint8_t framePerSecond, uint32_t timeInMilliseconds = 1000);
         ~EffectInit();
         virtual void reset() override;
         virtual void loop() override;

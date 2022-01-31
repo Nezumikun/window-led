@@ -4,7 +4,7 @@
 namespace Nezumikun {
   namespace WindowLed {
 
-    EffectInit::EffectInit(Canvas & canvas, uint8_t framePerSecond, uint16_t timeInMilliseconds) : EffectWithTime(canvas, framePerSecond, timeInMilliseconds) {
+    EffectInit::EffectInit(Canvas & canvas, uint8_t framePerSecond, uint32_t timeInMilliseconds) : EffectWithTime(canvas, framePerSecond, timeInMilliseconds) {
       this->effectBlink = new EffectBlink(canvas, framePerSecond, timeInMilliseconds * 2);
       this->effectFade = new EffectFade(canvas, framePerSecond, timeInMilliseconds);
       this->reset();

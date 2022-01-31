@@ -11,7 +11,10 @@ namespace Nezumikun {
       this->effectInit = new EffectInit(*canvas, framePerSecond, timeInMilliseconds * 2);
       this->effectRise = new EffectRise(*canvas, framePerSecond, timeInMilliseconds);
       this->effectFade = new EffectFade(*canvas, framePerSecond, timeInMilliseconds);
-      this->effectFill = new EffectFill(*canvas, framePerSecond);
+      this->effectCount = 2;
+      this->effects = (Effect **) malloc(this->effectCount * sizeof(void *));
+      this->effects[0] = new EffectFill(*canvas, framePerSecond);
+      this->effects[1] = new EffectPerlinNoise(*canvas, framePerSecond, 30 * 1000);
       this->mode = Mode::Init;
       this->saveMode = this->mode;
       this->startAt = StartAt::BottomLeft;
@@ -38,13 +41,26 @@ namespace Nezumikun {
       }
     }
 
+    void Lights::setStartAt(StartAt startAt) {
+      this->startAt = startAt;
+    }
+
+    void Lights::setLinesDirectoin(LinesDirection linesDirection) {
+      this->linesDirection = linesDirection;
+      if (Settings::debugLevel >= DebugLevel::Debug) {
+        Serial.print(F("Lights::setLinesDirectoin"));
+        Serial.println(this->linesDirection == LinesDirection::Horizontal ? F("Hotizontal") : F("Vertical"));
+      }
+    }
+
+
     uint16_t Lights::XY(uint8_t x, uint8_t y) {
       uint8_t tx = x;
       uint8_t ty = y;
       uint8_t tw = this->canvas->getWidth(false);
       uint8_t th = this->canvas->getHeight(false);
       uint16_t p = 0;
-      if (this->startAt == StartAt::BottomLeft && linesDirection == LinesDirection::Hotizontal) {
+      if (this->startAt == StartAt::BottomLeft && linesDirection == LinesDirection::Horizontal) {
         p = ty * tw + (((ty & 1) == 1) ? (tw - tx - 1) : tx);
       }
       else if (this->startAt == StartAt::BottomRight && linesDirection == LinesDirection::Vertical) {
@@ -89,7 +105,12 @@ namespace Nezumikun {
       this->show();
       if (this->firstCall) {
         this->firstCall = false;
+#ifdef DEBUG
+        this->mode = Mode::Mode1;
+        this->currentEffect = 1;
+#else
         this->mode = Mode::Init;
+#endif
       }
       switch (this->mode) {
         case Mode::Init:
@@ -97,13 +118,25 @@ namespace Nezumikun {
           if (this->effectInit->endOfEffect()) {
             delete this->effectInit;
             this->mode = Mode::Mode1;
+            this->currentEffect = 0;
           }
           break;
         case Mode::Mode1:
-          this->effectFill->loop();
-          if (this->effectInit->endOfEffect()) {
-            //delete this->effectInit;
-            //this->mode = Mode::Mode1;
+          this->effects[this->currentEffect]->loop();
+          if (this->effects[this->currentEffect]->endOfEffect()) {
+            if ((random8() & 0x01) == 0) {
+              uint8_t temp = 0;
+              do { 
+                temp = random8(2);
+              } while (temp == this->currentEffect);
+              Serial.print("Change effect from ");
+              Serial.print(this->currentEffect);
+              Serial.print(" to ");
+              Serial.println(temp);
+              this->currentEffect = temp;
+            } else {
+              Serial.println("Not change effect");
+            }
           }
           break;
         case Mode::Off:

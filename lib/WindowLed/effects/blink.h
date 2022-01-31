@@ -17,7 +17,7 @@ namespace Nezumikun {
         EffectFade *effectFade;
         CRGB color;
       public:
-        EffectBlink(Canvas & canvas, uint8_t framePerSecond, uint16_t timeInMilliseconds = 1000);
+        EffectBlink(Canvas & canvas, uint8_t framePerSecond, uint32_t timeInMilliseconds = 1000);
         ~EffectBlink();
         virtual void reset() override;
         virtual void loop() override;

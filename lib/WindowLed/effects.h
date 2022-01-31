@@ -5,5 +5,6 @@
 #include "settings.h"
 #include "effects/init.h"
 #include "effects/fill.h"
+#include "effects/noise.h"
 
 #endif

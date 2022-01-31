@@ -9,7 +9,7 @@ namespace Nezumikun {
     class EffectRise: public EffectWithTime {
       protected:
       public:
-        EffectRise(Canvas & canvas, uint8_t framePerSecond, uint16_t timeInMilliseconds = 1000) : EffectWithTime (canvas, framePerSecond, timeInMilliseconds) {
+        EffectRise(Canvas & canvas, uint8_t framePerSecond, uint32_t timeInMilliseconds = 1000) : EffectWithTime (canvas, framePerSecond, timeInMilliseconds) {
         };
         virtual void loop() override;
     };

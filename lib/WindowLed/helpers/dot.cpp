@@ -4,7 +4,7 @@ namespace Nezumikun {
   namespace WindowLed {
     namespace Helpers {
 
-      Dot::Dot (uint8_t framePerSecond, uint16_t timeInMilliseconds) {
+      Dot::Dot (uint8_t framePerSecond, uint32_t timeInMilliseconds) {
         this->framePerSecond = framePerSecond;
         this->timeInMilliseconds = timeInMilliseconds;
         this->frameLimit = timeInMilliseconds / framePerSecond - 1;

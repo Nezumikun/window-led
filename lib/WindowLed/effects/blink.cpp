@@ -3,7 +3,7 @@
 namespace Nezumikun {
   namespace WindowLed {
 
-    EffectBlink::EffectBlink(Canvas & canvas, uint8_t framePerSecond, uint16_t timeInMilliseconds) : EffectWithTime (canvas, framePerSecond, timeInMilliseconds) {
+    EffectBlink::EffectBlink(Canvas & canvas, uint8_t framePerSecond, uint32_t timeInMilliseconds) : EffectWithTime (canvas, framePerSecond, timeInMilliseconds) {
       this->effectFade = new EffectFade(canvas, framePerSecond, timeInMilliseconds / 2);
       this->effectRise = new EffectRise(canvas, framePerSecond, timeInMilliseconds / 2);
       this->setRandomColor();
@@ -49,7 +49,7 @@ namespace Nezumikun {
    }
 
    void EffectBlink::setRandomColor() {
-     this->setColor((uint8_t)random(255));
+     this->setColor((uint8_t)random8(255));
    }
 
   }

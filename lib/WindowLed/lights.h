@@ -18,6 +18,17 @@ namespace Nezumikun {
     };
 
     class Lights {
+      public:
+        enum class StartAt {
+          TopLeft,
+          TopRight,
+          BottomLeft,
+          BottomRight
+        };
+        enum class LinesDirection {
+          Vertical,
+          Horizontal
+        };
       protected:
         enum class Mode {
           Init,
@@ -30,7 +41,9 @@ namespace Nezumikun {
         EffectInit * effectInit;
         EffectRise * effectRise;
         EffectFade * effectFade;
-        EffectFill * effectFill;
+        Effect ** effects;
+        uint8_t effectCount;
+        uint8_t currentEffect;
         Canvas * canvas;
         CRGB * leds;
         uint16_t ledsNumber;
@@ -39,16 +52,8 @@ namespace Nezumikun {
         bool firstCall = true;
         SkipInfo * skip = NULL;
         uint8_t skipCount = 0;
-        enum class StartAt {
-          TopLeft,
-          TopRight,
-          BottomLeft,
-          BottomRight
-        } startAt;
-        enum class LinesDirection {
-          Vertical,
-          Hotizontal
-        } linesDirection;
+        StartAt startAt;
+        LinesDirection linesDirection;
         enum class State {
           On,
           Off
@@ -58,6 +63,8 @@ namespace Nezumikun {
       public:
         Lights(CRGB * leds, uint16_t ledsNumber, uint8_t width, uint8_t height, uint8_t framePerSecond = 25);
         void setSkipInfo(SkipInfo * skip, uint8_t count);
+        void setStartAt(StartAt startAt);
+        void setLinesDirectoin(LinesDirection linesDirection);
         void loop();
         void on();
         void off();

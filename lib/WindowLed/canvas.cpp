@@ -100,7 +100,7 @@ namespace Nezumikun {
     }
 
     void Canvas::setRotateRandom() {
-      this->anngle = (Rotate) (random(255) & 0x03);
+      this->anngle = (Rotate) (random8(255) & 0x03);
     }
 
     Canvas::Rotate Canvas::getRotate() {
