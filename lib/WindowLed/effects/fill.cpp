@@ -65,6 +65,10 @@ namespace Nezumikun {
       }
     }
 
+    const char * EffectFill::getName() {
+      return this->name;
+    }
+
     void EffectFill::loop() {
       Effect::loop();
       if (this->fade) {

@@ -127,12 +127,17 @@ namespace Nezumikun {
             if ((random8() & 0x01) == 0) {
               uint8_t temp = 0;
               do { 
-                temp = random8(2);
+                temp = random8(this->effectCount);
               } while (temp == this->currentEffect);
               Serial.print("Change effect from ");
               Serial.print(this->currentEffect);
+              Serial.print(": ");
+              Serial.print(this->effects[this->currentEffect]->getName());
               Serial.print(" to ");
-              Serial.println(temp);
+              Serial.print(temp);
+              Serial.print(": ");
+              Serial.print(this->effects[temp]->getName());
+              Serial.println();
               this->currentEffect = temp;
             } else {
               Serial.println("Not change effect");

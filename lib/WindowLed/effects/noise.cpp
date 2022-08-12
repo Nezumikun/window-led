@@ -17,6 +17,10 @@ namespace Nezumikun {
       free(this->data);
     }
 
+    const char * EffectPerlinNoise::getName() {
+      return this->name;
+    }
+
     void EffectPerlinNoise::reset() {
       this->canvas->setRotate(Canvas::Rotate::None);
       this->canvas->setBrightness(255);

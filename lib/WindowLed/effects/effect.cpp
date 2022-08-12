@@ -34,5 +34,9 @@ namespace Nezumikun {
       }
     }
 
+    const char * Effect::getName() {
+      return this->name;
+    }
+
   }
 }

@@ -14,12 +14,14 @@ namespace Nezumikun {
         bool firstCall = true;
         uint8_t framePerSecond;
         virtual void effectFinished();
+        const char * name = "Unnamed effect";
       public:
         Effect(Canvas & canvas, uint8_t framePerSecond);
         virtual ~Effect();
         bool endOfEffect();
         virtual void reset();
         virtual void loop() = 0;
+        virtual const char * getName();
         enum class Direction {
           Horizontal,
           Vertical,
