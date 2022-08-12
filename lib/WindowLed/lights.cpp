@@ -106,8 +106,8 @@ namespace Nezumikun {
       if (this->firstCall) {
         this->firstCall = false;
 #ifdef DEBUG
-        this->mode = Mode::Mode1;
-        this->currentEffect = 1;
+        this->mode = Mode::Demo;
+        this->currentEffect = 0;
 #else
         this->mode = Mode::Init;
 #endif
@@ -117,11 +117,11 @@ namespace Nezumikun {
           this->effectInit->loop();
           if (this->effectInit->endOfEffect()) {
             delete this->effectInit;
-            this->mode = Mode::Mode1;
+            this->mode = Mode::Demo;
             this->currentEffect = 0;
           }
           break;
-        case Mode::Mode1:
+        case Mode::Demo:
           this->effects[this->currentEffect]->loop();
           if (this->effects[this->currentEffect]->endOfEffect()) {
             if ((random8() & 0x01) == 0) {

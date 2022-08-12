@@ -35,7 +35,7 @@ namespace Nezumikun {
           On,
           Off,
           Wait,
-          Mode1
+          Demo
         } mode;
         Mode saveMode;
         EffectInit * effectInit;
