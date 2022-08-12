@@ -1,5 +1,6 @@
 #include "paletted_noise.h"
 #include "../settings.h"
+#include "gyver_palettes.h"
 namespace Nezumikun {
   namespace WindowLed {
 
@@ -10,22 +11,25 @@ namespace Nezumikun {
       this->z = random16();
       this->hue = random8();
       this->hueCounter = framePerSecond;
-      this->data = (uint8_t *) malloc(canvas.getLedsNumber() * sizeof(uint8_t));
     };
 
-    EffectPalettedPerlinNoise::~EffectPalettedPerlinNoise() {
-      free(this->data);
-    }
-
     void EffectPalettedPerlinNoise::reset() {
+      uint8_t count = sizeof(paletteArr) / sizeof(CRGBPalette16);
+      Serial.print(F("Palletes count = "));
+      Serial.print(count);
+      Serial.println();
+      this->currentPalette = random8(count);
+      Serial.print(F("Selected palette = "));
+      Serial.print(this->currentPalette);
+      Serial.println();
       this->canvas->setRotate(Canvas::Rotate::None);
       this->canvas->setBrightness(255);
       this->frame = 0;
       Effect::reset();
     }
 
-    const char * EffectPalettedPerlinNoise::getName() {
-      return this->name;
+    const __FlashStringHelper * EffectPalettedPerlinNoise::getName() {
+      return F("Paletted Perlin Noise");
     }
 
     void EffectPalettedPerlinNoise::loop() {
@@ -34,26 +38,12 @@ namespace Nezumikun {
       uint8_t width = this->canvas->getWidth(false);
       CRGB * leds = this->canvas->getLeds();
       for (uint8_t i = 0; i < this->canvas->getHeight(false); i++) {
-        uint16_t ioffset = this->scale * i;
         for (uint8_t j = 0; j < width; j++) {
-          uint16_t joffset = this->scale * j;
-          uint8_t temp = inoise8(this->x + ioffset, this->y + joffset, this->z);
-          this->data[i * width + j] = temp;
+          CRGB color = ColorFromPalette(paletteArr[this->currentPalette], inoise8(i * scale, j * scale, this->z / 10));
+          leds[this->canvas->XY(j, i)] = color;
         }
       }
       this->z += this->speed;
-      for (uint8_t i = 0; i < this->canvas->getHeight(false); i++) {
-        for (uint8_t j = 0; j < width; j++) {
-          //leds[this->canvas->XY(j, i)].setHSV(this->data[i * width + j], 255, this->data[j * width + i]);
-          leds[this->canvas->XY(j, i)].setHSV(this->hue + (this->data[i * width + j]), 255, this->data[j * width + i]);
-        }
-      }
-      this->x++;
-      this->y--;
-      if (--this->hueCounter == 0) {
-        this->hue++;
-        this->hueCounter = this->framePerSecond;
-      }
       if (((uint32_t)this->frame * (1000 / this->framePerSecond)) >= this->timeInMilliseconds) {
         this->effectFinished();
       }

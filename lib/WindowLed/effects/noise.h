@@ -24,13 +24,12 @@ namespace Nezumikun {
         // uint16_t scale = 4011; // very zoomed out and shimmery
         uint16_t scale = 50;
         uint8_t * data;
-        const char * name = "Perlin Noise";
       public:
         EffectPerlinNoise(Canvas & canvas, uint8_t framePerSecond, uint32_t timeInMilliseconds = 1000);
         ~EffectPerlinNoise();
         virtual void reset() override;
         virtual void loop() override;
-        virtual const char * getName() override;
+        virtual const __FlashStringHelper * getName() override;
     };
 
   }

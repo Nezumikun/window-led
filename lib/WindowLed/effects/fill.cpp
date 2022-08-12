@@ -65,8 +65,8 @@ namespace Nezumikun {
       }
     }
 
-    const char * EffectFill::getName() {
-      return this->name;
+    const __FlashStringHelper * EffectFill::getName() {
+      return F("Fill");
     }
 
     void EffectFill::loop() {

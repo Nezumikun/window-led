@@ -17,8 +17,8 @@ namespace Nezumikun {
       free(this->data);
     }
 
-    const char * EffectPerlinNoise::getName() {
-      return this->name;
+    const __FlashStringHelper * EffectPerlinNoise::getName() {
+      return F("Perlin Noise");
     }
 
     void EffectPerlinNoise::reset() {

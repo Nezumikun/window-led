@@ -34,13 +34,12 @@ namespace Nezumikun {
         Helpers::Dot * dot;
         bool riseEnd;
         bool fade;
-        const char * name = "Fill";
       public:
         EffectFill(Canvas & canvas, uint8_t framePerSecond);
         ~EffectFill();
         virtual void reset() override;
         virtual void loop() override;
-        virtual const char * getName() override;
+        virtual const __FlashStringHelper * getName() override;
     };
 
   }

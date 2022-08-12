@@ -34,8 +34,8 @@ namespace Nezumikun {
       }
     }
 
-    const char * Effect::getName() {
-      return this->name;
+    const __FlashStringHelper * Effect::getName() {
+      return F("Unnamed effect");
     }
 
   }
