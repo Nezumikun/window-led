@@ -6,5 +6,6 @@
 #include "effects/init.h"
 #include "effects/fill.h"
 #include "effects/noise.h"
+#include "effects/paletted_noise.h"
 
 #endif

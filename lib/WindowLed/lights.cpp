@@ -11,10 +11,11 @@ namespace Nezumikun {
       this->effectInit = new EffectInit(*canvas, framePerSecond, timeInMilliseconds * 2);
       this->effectRise = new EffectRise(*canvas, framePerSecond, timeInMilliseconds);
       this->effectFade = new EffectFade(*canvas, framePerSecond, timeInMilliseconds);
-      this->effectCount = 2;
+      this->effectCount = 3;
       this->effects = (Effect **) malloc(this->effectCount * sizeof(void *));
       this->effects[0] = new EffectFill(*canvas, framePerSecond);
       this->effects[1] = new EffectPerlinNoise(*canvas, framePerSecond, 30 * 1000);
+      this->effects[2] = new EffectPalettedPerlinNoise(*canvas, framePerSecond, 30 * 1000);
       this->mode = Mode::Init;
       this->saveMode = this->mode;
       this->startAt = StartAt::BottomLeft;
