@@ -68,8 +68,9 @@ void loop() {
   //delay(50);
 #endif
   if (prevMinutes != uptime.info.minutes) {
-    String strUptime = uptime.toString();
-    Serial.println(String("Uptime: ") + strUptime);
+    Serial.print(F("Uptime: "));
+    Serial.print(uptime.toString());
+    Serial.println();
     prevMinutes = uptime.info.minutes;
   }
   led_wifi.touch();

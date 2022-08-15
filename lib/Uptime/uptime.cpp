@@ -36,15 +36,12 @@ namespace Nezumikun {
     }
   }
 
-  String Uptime::toString() {
-    String res = String("");
+  char * Uptime::toString() {
     if (this->info.days > 0) {
-      res += String(this->info.days) + " d. ";
+      sprintf(buffer, "%dd ", this->info.days);
     }
-    res += (this->info.hours < 10 ? "0" : "") +  String(this->info.hours) + ":";
-    res += (this->info.minutes < 10 ? "0" : "") +  String(this->info.minutes) + ":";
-    res += (this->info.seconds < 10 ? "0" : "") +  String(this->info.seconds);
-    return res;
+    sprintf(buffer + strlen(buffer), "%02d:%02d:%02d", this->info.hours, this->info.minutes, this->info.seconds);
+    return buffer;
   }
 
 }

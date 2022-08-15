@@ -7,11 +7,12 @@ namespace Nezumikun {
   class Uptime {
     private:
       unsigned long prevMillis;
+      char buffer[14];
     public:
       Uptime();
       void reset();
       void loop();
-      String toString();
+      char * toString();
       struct Info {
         unsigned long days;
         unsigned char hours;
