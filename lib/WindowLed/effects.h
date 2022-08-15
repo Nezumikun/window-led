@@ -7,5 +7,6 @@
 #include "effects/fill.h"
 #include "effects/noise.h"
 #include "effects/paletted_noise.h"
+#include "effects/fire.h"
 
 #endif
