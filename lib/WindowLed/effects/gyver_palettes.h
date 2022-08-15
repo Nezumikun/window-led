@@ -3,14 +3,14 @@
 
 #include <FastLED.h>      // лента
 // http://soliton.vm.bytemark.co.uk/pub/cpt-city/
-
+/*
 DEFINE_GRADIENT_PALETTE( Fire_gp ) {
   0,     0,  0,  0,
   128,   255,  0,  0,
   224,   255, 255,  0,
   255,   255, 255, 255
 };
-/*
+
 DEFINE_GRADIENT_PALETTE( Sunset_Real_gp ) {
   0, 120,  0,  0,
   22, 179, 22,  0,
@@ -214,7 +214,7 @@ DEFINE_GRADIENT_PALETTE( leo_gp ) {
   240, 0, 0, 0,
   255, 0, 0, 0,
 };
-*/
+
 DEFINE_GRADIENT_PALETTE ( aurora_gp ) {
   0,  17, 177,  13,    //Greenish
   64, 121, 242,   5,    //Greenish
@@ -222,7 +222,7 @@ DEFINE_GRADIENT_PALETTE ( aurora_gp ) {
   192, 250,  77, 127,    //Pink
   255, 171, 101, 221     //Purple
 };
-
+*/
 DEFINE_GRADIENT_PALETTE ( redwhite_gp ) {
   0, 255, 0, 0,
   25, 255, 255, 255,
@@ -270,7 +270,7 @@ CRGBPalette16 paletteArr[] = {
   blueSmoke_gp,
   gummy_gp,
   leo_gp,*/
-  RainbowStripeColors_p,
+  // RainbowStripeColors_p,
   RainbowColors_p,
   PartyColors_p,
   // Sunset_Real_gp,
