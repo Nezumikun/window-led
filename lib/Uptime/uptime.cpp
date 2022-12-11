@@ -39,7 +39,7 @@ namespace Nezumikun {
   char * Uptime::toString() {
     buffer[0] = 0;
     if (this->info.days > 0) {
-      sprintf(buffer, "%dd ", this->info.days);
+      sprintf(buffer, "%lud ", this->info.days);
     }
     sprintf(buffer + strlen(buffer), "%02d:%02d:%02d", this->info.hours, this->info.minutes, this->info.seconds);
     return buffer;
