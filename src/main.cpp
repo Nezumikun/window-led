@@ -12,8 +12,8 @@
 #define WIDTH 10
 #define HEIGHT 14
 #else
-#define WIDTH 4
-#define HEIGHT 7
+#define WIDTH 7
+#define HEIGHT 4
 #endif
 Nezumikun::WindowLed::SkipInfo _skip[3] = {{ 0, 5 } , { 5 + 14, 3 }, { 5 + 14 + 3 + 14 * 2, 2 }};
 
@@ -30,7 +30,9 @@ void setup() {
   prevLeds = 500;
   Serial.begin(115200);
   led_wifi.blink(500);
-  // delay(500);
+#ifdef DEBUG
+  delay(500);
+#endif
   Serial.print("Intialized ");
   Serial.print(WIDTH);
   Serial.print("x");
@@ -45,7 +47,7 @@ void setup() {
 #ifdef BOARD_ARDUINO_NANO
   FastLED.addLeds<WS2812B, 2, GRB>(leds, NUM_LEDS);
 #else
-  FastLED.addLeds<WS2812B, D2, GRB>(leds, NUM_LEDS);
+  FastLED.addLeds<WS2812B, D0, GRB>(leds, NUM_LEDS);
 #endif
   //Nezumikun::WindowLed::Settings::debugLevel = Nezumikun::WindowLed::DebugLevel::Debug;
 #ifndef DEBUG
@@ -53,6 +55,8 @@ void setup() {
 #else
   lights.setStartAt(Nezumikun::WindowLed::Lights::StartAt::BottomLeft);
   lights.setLinesDirectoin(Nezumikun::WindowLed::Lights::LinesDirection::Horizontal);
+  lights.setStartAt(Nezumikun::WindowLed::Lights::StartAt::BottomRight);
+  lights.setLinesDirectoin(Nezumikun::WindowLed::Lights::LinesDirection::Vertical);
 #endif
   uptime.reset();
 }
