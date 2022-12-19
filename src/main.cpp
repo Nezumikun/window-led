@@ -21,7 +21,11 @@ CRGB leds[NUM_LEDS];
 Nezumikun::WindowLed::Lights lights(&leds[0], NUM_LEDS, WIDTH, HEIGHT, FRAME_PER_SECOND);
 Nezumikun::Uptime uptime;
 
+#ifdef BOARD_ESP01
+Nezumikun::LED led_wifi(2);
+#else
 Nezumikun::LED led_wifi(13);
+#endif
 
 unsigned long prevLeds = 0;
 unsigned char prevMinutes = -1;
@@ -30,9 +34,7 @@ void setup() {
   prevLeds = 500;
   Serial.begin(115200);
   led_wifi.blink(500);
-#ifdef DEBUG
   delay(500);
-#endif
   Serial.print("Intialized ");
   Serial.print(WIDTH);
   Serial.print("x");
@@ -46,6 +48,8 @@ void setup() {
   Serial.println();
 #ifdef BOARD_ARDUINO_NANO
   FastLED.addLeds<WS2812B, 2, GRB>(leds, NUM_LEDS);
+#elif BOARD_ESP01
+  FastLED.addLeds<WS2812B, 0, GRB>(leds, NUM_LEDS);
 #else
   FastLED.addLeds<WS2812B, D0, GRB>(leds, NUM_LEDS);
 #endif

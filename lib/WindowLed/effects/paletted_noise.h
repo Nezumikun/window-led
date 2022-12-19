@@ -22,7 +22,7 @@ namespace Nezumikun {
 
         // uint16_t scale = 1; // mostly just solid colors
         // uint16_t scale = 4011; // very zoomed out and shimmery
-        uint16_t scale = 20;
+        uint16_t scale = 50;
         uint8_t currentPalette = 0;
       public:
         EffectPalettedPerlinNoise(Canvas & canvas, uint8_t framePerSecond, uint32_t timeInMilliseconds = 1000);

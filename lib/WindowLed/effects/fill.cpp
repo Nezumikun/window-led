@@ -6,7 +6,7 @@ namespace Nezumikun {
     EffectFill::EffectFill(Canvas & canvas, uint8_t framePerSecond) : Effect (canvas, framePerSecond) {
       this->angleStep = (uint8_t)((uint32_t) 128 * 25 / 4 / framePerSecond);
       this->effectFade = new EffectFade(canvas, framePerSecond);
-      this->dot = new Helpers::Dot(framePerSecond, 500);
+      this->dot = new Helpers::Dot(framePerSecond, 250);
       this->reset();
       this->firstCall = true;
     };

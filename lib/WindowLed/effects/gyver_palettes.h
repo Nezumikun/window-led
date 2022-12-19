@@ -214,6 +214,7 @@ DEFINE_GRADIENT_PALETTE( leo_gp ) {
   240, 0, 0, 0,
   255, 0, 0, 0,
 };
+*/
 
 DEFINE_GRADIENT_PALETTE ( aurora_gp ) {
   0,  17, 177,  13,    //Greenish
@@ -222,7 +223,7 @@ DEFINE_GRADIENT_PALETTE ( aurora_gp ) {
   192, 250,  77, 127,    //Pink
   255, 171, 101, 221     //Purple
 };
-*/
+
 DEFINE_GRADIENT_PALETTE ( redwhite_gp ) {
   0, 255, 0, 0,
   25, 255, 255, 255,
@@ -239,21 +240,23 @@ DEFINE_GRADIENT_PALETTE ( redwhite_gp ) {
 
 CRGBPalette16 paletteArr[] = {
   redwhite_gp,
-  // aurora_gp,
+  aurora_gp,
   xmas_gp,
   // Fire_gp,
-  /*HeatColors_p,
-  WoodFireColors_p,
+  HeatColors_p,
+  LavaColors_p,
+  CloudColors_p,
+  RainbowColors_p,
+  PartyColors_p,
+  /* WoodFireColors_p,
   NormalFire_p,
   LithiumFireColors_p,
   SodiumFireColors_p,
   CopperFireColors_p,
   AlcoholFireColors_p,
-  LavaColors_p,
   PartyColors_p,
   RainbowColors_p,
   RainbowStripeColors_p,
-  CloudColors_p,
   OceanColors_p,
   ForestColors_p,
   Sunset_Real_gp,
@@ -271,8 +274,6 @@ CRGBPalette16 paletteArr[] = {
   gummy_gp,
   leo_gp,*/
   // RainbowStripeColors_p,
-  RainbowColors_p,
-  PartyColors_p,
   // Sunset_Real_gp,
   // dkbluered_gp,
   // warmGrad_gp,

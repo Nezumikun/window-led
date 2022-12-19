@@ -60,7 +60,7 @@ namespace Nezumikun {
           }
           this->mode = (this->mode == Mode::Red) ? Mode::Green
             : (this->mode == Mode::Green) ? Mode::Blue
-            : (this->mode == Mode::Blue) ? Mode::White
+            // : (this->mode == Mode::Blue) ? Mode::White
             : Mode::End
           ;
           this->subMode = SubMode::Draw;
