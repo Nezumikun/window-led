@@ -28,7 +28,12 @@ namespace Nezumikun {
       Effect::reset();
     }
 
+    void EffectPerlinNoise::effectFinished() {
+      this->_endOfEffect = true;
+    };
+
     void EffectPerlinNoise::loop() {
+      this->_endOfEffect = false;
       Effect::loop();
       this->frame++;
       uint8_t width = this->canvas->getWidth(false);

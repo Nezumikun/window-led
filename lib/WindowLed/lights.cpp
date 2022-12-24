@@ -8,15 +8,18 @@ namespace Nezumikun {
       this->ledsNumber = ledsNumber;
       this->framePerSecond = framePerSecond;
       this->canvas = new Canvas(width, height);
-      this->effectInit = new EffectInit(*canvas, framePerSecond, timeInMilliseconds * 2);
+      // this->effectInit = new EffectInit(*canvas, framePerSecond, timeInMilliseconds * 2);
       this->effectRise = new EffectRise(*canvas, framePerSecond, timeInMilliseconds);
       this->effectFade = new EffectFade(*canvas, framePerSecond, timeInMilliseconds);
       this->effectCount = 4;
+      /*
       this->effects = (Effect **) malloc(this->effectCount * sizeof(void *));
       this->effects[0] = new EffectFill(*canvas, framePerSecond);
       this->effects[1] = new EffectPerlinNoise(*canvas, framePerSecond, 30 * 1000);
       this->effects[2] = new EffectPalettedPerlinNoise(*canvas, framePerSecond, 30 * 1000);
       this->effects[3] = new EffectFire(*canvas, framePerSecond, 30 * 1000);
+      */
+      this->effect = new EffectInit(*canvas, framePerSecond, timeInMilliseconds * 2);
       this->mode = Mode::Init;
       this->saveMode = this->mode;
       this->startAt = StartAt::BottomLeft;
@@ -116,16 +119,17 @@ namespace Nezumikun {
       }
       switch (this->mode) {
         case Mode::Init:
-          this->effectInit->loop();
-          if (this->effectInit->endOfEffect()) {
-            delete this->effectInit;
+          this->effect->loop();
+          if (this->effect->endOfEffect()) {
+            delete this->effect;
             this->mode = Mode::Demo;
             this->currentEffect = 0;
+            this->effect = new EffectFill(*canvas, framePerSecond);
           }
           break;
         case Mode::Demo:
-          this->effects[this->currentEffect]->loop();
-          if (this->effects[this->currentEffect]->endOfEffect()) {
+          this->effect->loop();
+          if (this->effect->endOfEffect()) {
             if ((random8() & 0x01) == 0) {
               uint8_t temp = 0;
               do { 
@@ -135,11 +139,25 @@ namespace Nezumikun {
               Serial.print("Change effect from ");
               Serial.print(this->currentEffect);
               Serial.print(": ");
-              Serial.print(this->effects[this->currentEffect]->getName());
+              Serial.print(this->effect->getName());
               Serial.print(" to ");
               Serial.print(temp);
+              delete this->effect;
+              switch (temp) {
+                case 1: 
+                  this->effect = new EffectPerlinNoise(*canvas, framePerSecond, 30 * 1000);
+                  break;
+                case 2:
+                  this->effect = new EffectPalettedPerlinNoise(*canvas, framePerSecond, 30 * 1000);
+                  break;
+                case 3:
+                  this->effect = new EffectFire(*canvas, framePerSecond, 30 * 1000);
+                  break;
+                default:
+                  this->effect = new EffectFill(*canvas, framePerSecond);
+              }
               Serial.print(": ");
-              Serial.print(this->effects[temp]->getName());
+              Serial.print(this->effect->getName());
               Serial.println();
               this->currentEffect = temp;
             } else {

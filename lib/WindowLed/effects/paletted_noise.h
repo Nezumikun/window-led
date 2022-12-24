@@ -16,14 +16,15 @@ namespace Nezumikun {
         uint8_t hue;
         uint8_t hueCounter;
 
-        uint16_t speed = 2; // a nice starting speed, mixes well with a scale of 100
+        uint16_t speed = 20; // a nice starting speed, mixes well with a scale of 100
         // uint16_t speed = 33;
         // uint16_t speed = 100; // wicked fast!
 
         // uint16_t scale = 1; // mostly just solid colors
         // uint16_t scale = 4011; // very zoomed out and shimmery
-        uint16_t scale = 50;
+        uint16_t scale = 70;
         uint8_t currentPalette = 0;
+        virtual void effectFinished() override;
       public:
         EffectPalettedPerlinNoise(Canvas & canvas, uint8_t framePerSecond, uint32_t timeInMilliseconds = 1000);
         virtual void reset() override;

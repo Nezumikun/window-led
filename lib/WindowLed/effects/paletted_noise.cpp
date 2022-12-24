@@ -28,11 +28,16 @@ namespace Nezumikun {
       Effect::reset();
     }
 
+    void EffectPalettedPerlinNoise::effectFinished() {
+      this->_endOfEffect = true;
+    };
+
     const __FlashStringHelper * EffectPalettedPerlinNoise::getName() {
       return F("Paletted Perlin Noise");
     }
 
     void EffectPalettedPerlinNoise::loop() {
+      this->_endOfEffect = false;
       Effect::loop();
       this->frame++;
       uint8_t width = this->canvas->getWidth(false);

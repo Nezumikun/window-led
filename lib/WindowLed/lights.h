@@ -38,10 +38,11 @@ namespace Nezumikun {
           Demo
         } mode;
         Mode saveMode;
-        EffectInit * effectInit;
+        // EffectInit * effectInit;
         EffectRise * effectRise;
         EffectFade * effectFade;
-        Effect ** effects;
+        // Effect ** effects;
+        Effect * effect;
         uint8_t effectCount;
         uint8_t currentEffect;
         Canvas * canvas;
