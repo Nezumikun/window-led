@@ -23,6 +23,8 @@ Nezumikun::Uptime uptime;
 
 #ifdef BOARD_ESP01
 Nezumikun::LED led_wifi(2);
+#elif BOARD_ESP12F
+Nezumikun::LED led_wifi(2);
 #else
 Nezumikun::LED led_wifi(13);
 #endif
@@ -50,6 +52,8 @@ void setup() {
   FastLED.addLeds<WS2812B, 2, GRB>(leds, NUM_LEDS);
 #elif BOARD_ESP01
   FastLED.addLeds<WS2812B, 0, GRB>(leds, NUM_LEDS);
+#elif BOARD_ESP12F
+  FastLED.addLeds<WS2812B, 4, GRB>(leds, NUM_LEDS);
 #else
   FastLED.addLeds<WS2812B, D0, GRB>(leds, NUM_LEDS);
 #endif
